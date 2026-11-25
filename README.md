@@ -14,7 +14,7 @@ Developed by **[Vu Viet Anh](https://vuvietanh2309.github.io/)** (Vũ Việt Anh
 ![Metrics](https://img.shields.io/badge/metrics-18-8957e5)
 ![Agreement with MATLAB](https://img.shields.io/badge/agreement_with_MATLAB-%E2%89%A41e--12-2ea043)
 
-[Quick start](#-quick-start) · [Metrics](#-metrics) · [CLI](#-command-line) · [Verification](#-verification) · [Citation](#-citation) · [Tiếng Việt](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/README.vi.md)
+[Quick start](#-quick-start) · [Metrics](#-metrics) · [API docs](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/docs/API.md) · [CLI](#-command-line) · [Verification](#-verification) · [Citation](#-citation) · [Tiếng Việt](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/README.vi.md)
 
 </div>
 
@@ -57,6 +57,8 @@ fm.evaluate(A, B, F)                    # all 18 metrics
 ```
 
 ## 📐 Metrics
+
+Full API reference with a worked example for every function: [docs/API.md](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/docs/API.md).
 
 `Q_X(A, B, F)` takes the two sources and the fused image; no-reference metrics take only `F`.
 Inputs are grayscale `uint8` or `double` in [0, 255].
@@ -213,4 +215,4 @@ original copyright headers.
 The `.m` files in `matlab/` are the reference implementations used for verification; files derived from published
 toolboxes keep their original headers.
 
-Questions, bug reports and new metric ports: [GitHub Issues](https://github.com/VuVietAnh2309/fusion-metrics/issues).
+Questions: [Discussions](https://github.com/VuVietAnh2309/fusion-metrics/discussions) · bugs and new metric ports: [Issues](https://github.com/VuVietAnh2309/fusion-metrics/issues) · contributing: [CONTRIBUTING.md](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/CONTRIBUTING.md).

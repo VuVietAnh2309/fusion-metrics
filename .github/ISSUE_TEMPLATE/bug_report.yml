@@ -1,0 +1,30 @@
+name: Bug report
+description: A crash, wrong result, or a value that differs from MATLAB
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Include the full error message or the values you got.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal example
+      description: Code or CLI command. If it is about a wrong value, attach or link the three images (A, B, fused).
+      render: python
+    validations:
+      required: true
+  - type: input
+    id: matlab
+    attributes:
+      label: Expected value (e.g. from the .m file in MATLAB), if known
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Output of `fusion-metrics --version` and `python --version`; OS.
+    validations:
+      required: true

@@ -1,0 +1,29 @@
+name: Metric request / port
+description: Propose a new metric or volunteer to port one from matlab/
+labels: [metric-port]
+body:
+  - type: input
+    id: metric
+    attributes:
+      label: Metric
+      description: Name and, if it exists, the .m file in matlab/
+    validations:
+      required: true
+  - type: input
+    id: paper
+    attributes:
+      label: Original paper
+      description: Full citation or DOI of the paper that defines the metric.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Reference implementation and notes
+      description: Where the MATLAB/Python reference code comes from, its licence, and anything unusual about it.
+  - type: checkboxes
+    id: volunteer
+    attributes:
+      label: Contribution
+      options:
+        - label: I would like to port this metric myself (see CONTRIBUTING.md)
