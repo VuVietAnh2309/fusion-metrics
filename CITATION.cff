@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use fusion-metrics, please cite it as below, and also cite the original paper of every metric you report (see the README's metric table)."
+title: "fusion-metrics: MATLAB-faithful objective quality metrics for image fusion"
+type: software
+license: MIT
+version: 1.0.0
+date-released: 2026-11-25
+repository-code: "https://github.com/VuVietAnh2309/fusion-metrics"
+authors:
+  - family-names: Vu
+    given-names: Viet Anh
+    orcid: "https://orcid.org/0009-0006-6977-5922"
+    affiliation: Hanoi University of Science and Technology
+keywords:
+  - image fusion
+  - evaluation metrics
+  - medical image fusion
+  - image quality assessment

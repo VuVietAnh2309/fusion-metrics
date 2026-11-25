@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fusion-metrics"
+version = "1.0.0"
+description = "Objective image-fusion quality metrics (Q_ABF, MI, NCIE, FMI, FSIM, VIF, ...) ported line by line from MATLAB and verified to round-off precision"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT (see LICENSE and NOTICE for third-party-derived metrics)" }
+authors = [{ name = "Vu Viet Anh", email = "vietanhresearcher@gmail.com" }]
+maintainers = [{ name = "Vu Viet Anh", email = "vietanhresearcher@gmail.com" }]
+keywords = ["image fusion", "medical image fusion", "infrared visible fusion", "evaluation metrics", "image quality", "matlab"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Operating System :: OS Independent",
+]
+dependencies = ["numpy", "scipy", "opencv-python"]
+
+[project.urls]
+Homepage = "https://github.com/VuVietAnh2309/fusion-metrics"
+Issues = "https://github.com/VuVietAnh2309/fusion-metrics/issues"
+
+[project.scripts]
+fusion-metrics = "fusion_metrics.cli:main"
+
+[tool.setuptools]
+packages = ["fusion_metrics"]

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.venv/
+verify/cases.mat
+verify/cases.json
+verify/octave_out*.mat
+verify/reference_values.mat
+verify/f2.mat

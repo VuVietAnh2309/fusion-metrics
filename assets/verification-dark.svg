@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#6e7681"/></marker><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#00d2ff"/><stop offset=".55" stop-color="#a855f7"/><stop offset="1" stop-color="#00f5a0"/></linearGradient></defs>
+<rect x=".5" y=".5" width="1199" height="299" rx="14" fill="#0d1117" stroke="#30363d"/>
+<rect x="0" y="0" width="1200" height="4" rx="2" fill="url(#g)"/>
+<text x="40" y="46" font-size="22" font-weight="700" fill="#e6edf3">fusion-metrics</text>
+<text x="222" y="46" font-size="14" fill="#8b949e">every metric is checked against the original MATLAB code, value by value</text>
+<rect x="40" y="86" width="200" height="112" rx="10" fill="#161b22" stroke="#30363d" stroke-width="1.4"/>
+<text x="140.0" y="114" text-anchor="middle" font-size="14.5" font-weight="700" fill="#e6edf3">Test images</text>
+<text x="140.0" y="138" text-anchor="middle" font-size="12" fill="#8b949e">7 synthetic edge cases</text>
+<text x="140.0" y="157" text-anchor="middle" font-size="12" fill="#8b949e">+ public PET/SPECT–MRI</text>
+<text x="140.0" y="176" text-anchor="middle" font-size="12" fill="#8b949e">pairs (Harvard atlas)</text>
+<rect x="330" y="72" width="230" height="60" rx="10" fill="#2d1b06" stroke="#f0883e" stroke-width="1.4"/>
+<text x="445.0" y="100" text-anchor="middle" font-size="14.5" font-weight="700" fill="#e6edf3">MATLAB reference .m</text>
+<text x="445" y="120" text-anchor="middle" font-size="12" fill="#8b949e">run in MATLAB / GNU Octave</text>
+<rect x="330" y="160" width="230" height="60" rx="10" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.4"/>
+<text x="445.0" y="188" text-anchor="middle" font-size="14.5" font-weight="700" fill="#e6edf3">fusion_metrics (Python)</text>
+<text x="445" y="208" text-anchor="middle" font-size="12" fill="#8b949e">line-by-line port, NumPy/SciPy</text>
+<line x1="244" y1="130" x2="324" y2="104" stroke="#6e7681" stroke-width="1.8" marker-end="url(#a)"/>
+<line x1="244" y1="152" x2="324" y2="188" stroke="#6e7681" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="650" y="86" width="230" height="112" rx="10" fill="#161b22" stroke="#30363d" stroke-width="1.4"/>
+<text x="765.0" y="114" text-anchor="middle" font-size="14.5" font-weight="700" fill="#e6edf3">Compare per value</text>
+<text x="765.0" y="138" text-anchor="middle" font-size="12" fill="#8b949e">|Python − MATLAB|</text>
+<text x="765.0" y="157" text-anchor="middle" font-size="12" fill="#8b949e">on every case and metric</text>
+<text x="765.0" y="176" text-anchor="middle" font-size="12" fill="#8b949e">same pixels, same dtype</text>
+<line x1="564" y1="104" x2="644" y2="128" stroke="#6e7681" stroke-width="1.8" marker-end="url(#a)"/>
+<line x1="564" y1="188" x2="644" y2="156" stroke="#6e7681" stroke-width="1.8" marker-end="url(#a)"/>
+<rect x="970" y="86" width="190" height="112" rx="10" fill="#0f2a19" stroke="#2ea043" stroke-width="2"/>
+<text x="1065.0" y="114" text-anchor="middle" font-size="14.5" font-weight="700" fill="#e6edf3">Agreement</text>
+<text x="1065" y="148" text-anchor="middle" font-size="26" font-weight="800" fill="#3fb950">≤ 1e-12</text>
+<text x="1065" y="174" text-anchor="middle" font-size="12" fill="#8b949e">round-off level</text>
+<line x1="884" y1="142.0" x2="964" y2="142.0" stroke="#6e7681" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="40" y="266" font-size="12" fill="#8b949e">Faithful to MATLAB details that ports usually get wrong: conv2 'same' centring, uint8 saturation in MI, edge() thinning, imgradientxy borders, left-to-right summation.</text>
+</svg>

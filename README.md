@@ -1,0 +1,213 @@
+<div align="center">
+
+# fusion-metrics
+
+**Objective quality metrics for image fusion — ported line by line from MATLAB and verified to round-off precision.**
+
+Developed by **[Vu Viet Anh](https://vuvietanh2309.github.io/)** (Vũ Việt Anh) · AI Engineer & Researcher, Hanoi University of Science and Technology
+
+[![tests](https://github.com/VuVietAnh2309/fusion-metrics/actions/workflows/test.yml/badge.svg)](https://github.com/VuVietAnh2309/fusion-metrics/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/LICENSE)
+![Python](https://img.shields.io/badge/python-3.10–3.13-3776AB?logo=python&logoColor=white)
+![Metrics](https://img.shields.io/badge/metrics-18-8957e5)
+![Agreement with MATLAB](https://img.shields.io/badge/agreement_with_MATLAB-%E2%89%A41e--12-2ea043)
+
+[Quick start](#-quick-start) · [Metrics](#-metrics) · [CLI](#-command-line) · [Verification](#-verification) · [Citation](#-citation) · [Tiếng Việt](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/README.vi.md)
+
+</div>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/VuVietAnh2309/fusion-metrics/main/assets/verification-dark.svg">
+  <img alt="Verification pipeline: test images are scored by the original MATLAB files and by the Python port; values agree to within 1e-12" src="https://raw.githubusercontent.com/VuVietAnh2309/fusion-metrics/main/assets/verification.svg">
+</picture>
+
+## Why
+
+Image-fusion papers report Q<sup>AB/F</sup>, MI, NCIE, FMI, VIF… but compute them with scattered MATLAB scripts and
+ad-hoc Python re-implementations that quietly disagree: a different gray conversion, a one-pixel shift in
+`conv2(...,'same')`, `uint8` saturation in a histogram, a different edge-thinning rule. The same method can then
+score differently from paper to paper.
+
+`fusion-metrics` gives one reference implementation that anyone can `pip install`:
+
+- **MATLAB-faithful** — each function is a line-by-line port of a reference `.m` file, keeping its name, argument
+  order and numerical quirks.
+- **Verified, not assumed** — a self-test compares every metric with values produced by the original `.m` files;
+  agreement is at round-off level (≤ 1e-12). It runs in CI on Python 3.10–3.13.
+- **Ready for benchmarks** — score one image from Python, or a whole method folder from the command line to CSV.
+
+## 🚀 Quick start
+
+```bash
+pip install git+https://github.com/VuVietAnh2309/fusion-metrics.git
+```
+
+```python
+import fusion_metrics as fm
+
+A = fm.read_gray("MRI.png")     # MATLAB imread + rgb2gray -> uint8
+B = fm.read_gray("PET.png")     # pseudo-colour images are converted to gray
+F = fm.read_gray("fused.png")
+
+fm.Q_ABF(A, B, F)                       # one metric
+fm.evaluate(A, B, F, "information")     # a preset -> {"Q_MI": ..., "Q_NCIE": ..., ...}
+fm.evaluate(A, B, F)                    # all 18 metrics
+```
+
+## 📐 Metrics
+
+`Q_X(A, B, F)` takes the two sources and the fused image; no-reference metrics take only `F`.
+Inputs are grayscale `uint8` or `double` in [0, 255].
+
+| Function | Metric | Original reference |
+|---|---|---|
+| `Q_MLI(F)` | Mean local intensity, [0, 1] | — |
+| `Q_En(F)` | Entropy | Roberts et al., *J. Appl. Remote Sens.* 2008 |
+| `SF(F)` | Spatial frequency (4 directions) | Eskicioglu & Fisher, *IEEE TCOM* 1995 |
+| `Q_AG(F)` | Average gradient (forward differences, [0, 1]) | — |
+| `AG_VIFB(F)` | Average gradient, VIFB definition (0–255) | Zhang et al., VIFB, *CVPRW* 2020 |
+| `Q_MI(A,B,F)` | Mutual information MI(A,F) + MI(B,F), bits | Qu et al., *Electron. Lett.* 2002 |
+| `Q_NCIE(A,B,F)` | Nonlinear correlation information entropy | Wang, Shen & Jin, 2008 |
+| `Q_TE_Nava(A,B,F)` | Tsallis entropy, q = 0.43137 | Nava et al., *Proc. SPIE* 2007 |
+| `Q_FMI(A,B,F)` | Feature mutual information on edge maps, w = 3 | Haghighat et al., *Comput. Electr. Eng.* 2011 |
+| `Q_ABF(A,B,F)` | Edge-based Q<sup>AB/F</sup> | Xydeas & Petrović, *Electron. Lett.* 2000 |
+| `Q_M(A,B,F)` | Multiscale edge preservation (Haar, 2 levels) | Wang & Liu, *ICSP* 2008 |
+| `Q_SF(A,B,F)` | Relative spatial-frequency error | Zheng et al., *Inf. Fusion* 2007 |
+| `Q_FSIM(A,B,F)` | Feature similarity, (FSIM(A,F) + FSIM(B,F)) / 2 | Zhang et al., *IEEE TIP* 2011 |
+| `Q_PSNR(A,B,F)` | Mean of PSNR(F,A) and PSNR(F,B) | — |
+| `Q_CC(A,B,F)` | Mean correlation coefficient | — |
+| `Q_SCD(A,B,F)` | Sum of the correlations of differences | Aslantas & Bendes, *AEU* 2015 |
+| `VIF_Sheikh(A,B,F)` | VIF(A,F) + VIF(B,F) | Sheikh & Bovik, *IEEE TIP* 2006 |
+| `Q_VIFF(A,B,F)` | Visual information fidelity for fusion | Han et al., *Inf. Fusion* 2013 |
+
+The taxonomy follows Liu et al., *“Objective assessment of multiresolution image fusion algorithms for context
+enhancement in night vision”*, IEEE TPAMI 2012. **Please cite the original paper of every metric you report.**
+
+> [!NOTE]
+> Two pairs look alike but are different metrics: `Q_AG` vs `AG_VIFB` (different differences and scale), and
+> `Q_VIFF` (Han et al.) vs `VIF_Sheikh` (Sheikh & Bovik). State which one you use.
+
+### Presets
+
+| Preset | Metrics |
+|---|---|
+| `image` | `Q_MLI`, `Q_En`, `SF`, `AG_VIFB` |
+| `information` | `Q_MI`, `Q_NCIE`, `Q_TE_Nava`, `Q_FMI` |
+| `feature` | `Q_ABF`, `Q_M`, `Q_SF`, `Q_FSIM` |
+| `similarity` | `Q_PSNR`, `Q_CC`, `Q_SCD`, `VIF_Sheikh`, `Q_VIFF` |
+| `all` | all 18 |
+
+## 💻 Command line
+
+```bash
+# one fused image
+fusion-metrics MRI.png PET.png fused.png --preset feature
+
+# a whole method: files matched by name across three folders -> per-image CSV + mean
+fusion-metrics --dirs data/MRI data/PET results/MyMethod --preset all --csv mymethod.csv
+
+fusion-metrics --list        # metrics and presets
+```
+
+Add `--json` for machine-readable output, or `--reader cv` to use the OpenCV gray conversion instead of MATLAB's.
+
+## ⚠️ Conventions that change the numbers
+
+- **Gray conversion.** `read_gray` reproduces MATLAB `imread` + `rgb2gray` (0.298936, 0.587043, 0.114021, rounded) —
+  use it to match MATLAB. `read_gray_cv` uses OpenCV's 0.299 / 0.587 / 0.114, common in Python code bases. Loading with
+  `cv2.imread(path, 0)` directly gives yet another result.
+- **Data type matters for `Q_MI`.** On `uint8` input MATLAB saturates `255 + 1` to 255, merging the top gray level into
+  the previous histogram bin. The port reproduces this from the array's dtype — read images as `uint8`.
+- **Edge maps for `Q_FMI`.** MATLAB's `edge()` thins edges inside a compiled mex file. The port reproduces its rule
+  (non-maximum suppression with `<=` towards the left/upper and `<` towards the right/lower neighbour), which matches
+  values computed in MATLAB.
+- **Summation order.** `Q_FMI` branches on exact zero tests, so its sums follow MATLAB's left-to-right order;
+  NumPy's pairwise summation would shift results by up to 5e-3.
+
+## ✅ Verification
+
+```bash
+python verify/selftest.py        # ~20 s, prints "ALL OK"; no MATLAB/Octave needed
+```
+
+The self-test scores 7 seeded synthetic cases chosen to hit every code path — structured, noise, saturated 0/255,
+low range [0, 40], {0, 1} images, odd size 255×257, and 512×512 — and compares the Python values with those produced by
+the original `.m` files in GNU Octave:
+
+- **17/17 metrics agree** with relative error ≤ 1.7e-12 (most ≈ 1e-15), and `edge_sobel` reproduces the stored edge
+  maps pixel for pixel.
+- One documented exception: `Q_VIFF` on the *saturated* case differs by 2.7e-5. Its perfectly flat regions put local
+  variances at round-off level, right at the `.m` file's 1e-10 thresholds, where the result depends on the summation
+  order inside `filter2` (which differs between MATLAB, Octave and SciPy). On real images `Q_VIFF` agrees to 1e-14.
+
+A cross-check on real PET/SPECT–MRI pairs from the public Harvard Whole Brain Atlas gave the same picture: every metric
+within 4e-12 of the `.m` files on identical pixel arrays.
+
+<details>
+<summary><b>Regenerate the reference values (needs GNU Octave)</b></summary>
+
+```bash
+conda create -p ./octave -c conda-forge octave octave-image octave-signal
+cd verify
+python make_reference_cases.py && octave-cli run_reference.m \
+  && python selftest.py --export && python selftest.py
+```
+
+`verify/octave_shims/` supplies `dwt2` (Haar, MATLAB's default `'sym'` mode — Octave has no Wavelet Toolbox) and
+`imgradientxy` with MATLAB's border convention. They are only used when running the `.m` files in Octave.
+
+</details>
+
+## 🗂️ Repository layout
+
+```
+fusion-metrics/
+├── fusion_metrics/      # the Python package (+ CLI in cli.py)
+├── matlab/              # reference .m implementations
+├── matlab_added/        # MATLAB references for AG_VIFB and VIF_Sheikh
+├── verify/              # self-test, reference cases/values, Octave scripts and shims
+├── examples/            # minimal API example
+└── assets/              # README figures
+```
+
+## 🧭 Roadmap
+
+The `matlab/` folder holds 15 more reference metrics without a Python port yet: `Q_C`, `Q_CB`, `Q_CV`, `Q_CE`, `Q_CI`,
+`Q_EI`, `Q_H`, `Q_NMI`, `Q_P`, `Q_S`, `Q_TE`, `Q_UIQI`, `Q_Y`, `Q_NABF`, `MS_SSIM`. Contributions are welcome —
+a port is accepted once it passes the self-test against its `.m` file.
+
+## 📝 Citation
+
+If `fusion-metrics` helps your work, please cite it (GitHub's **“Cite this repository”** button gives the same entry)
+**and** the original paper of each metric you report:
+
+```bibtex
+@software{vu2026fusionmetrics,
+  author  = {Vu, Viet Anh},
+  title   = {fusion-metrics: MATLAB-faithful objective quality metrics for image fusion},
+  year    = {2026},
+  version = {1.0.0},
+  url     = {https://github.com/VuVietAnh2309/fusion-metrics}
+}
+```
+
+## 👤 Author
+
+**Vu Viet Anh** (Vũ Việt Anh) — author and maintainer of the Python package, CLI and verification suite.<br/>
+AI Engineer & MSc student in Computer Science, Hanoi University of Science and Technology (HUST).
+
+[![Email](https://img.shields.io/badge/Email-vietanhresearcher%40gmail.com-informational?logo=gmail&logoColor=white)](mailto:vietanhresearcher@gmail.com)
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0006--6977--5922-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0006-6977-5922)
+[![Website](https://img.shields.io/badge/Website-vuvietanh2309.github.io-7c3aed)](https://vuvietanh2309.github.io/)
+[![GitHub](https://img.shields.io/badge/GitHub-VuVietAnh2309-181717?logo=github)](https://github.com/VuVietAnh2309)
+
+## 📄 License
+
+The package is MIT-licensed. `Q_FSIM`, `Q_VIFF` and `VIF_Sheikh` are translations of third-party code that remains
+under its authors' terms (educational and research use only) — see [NOTICE](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/NOTICE). Reference `.m` files keep their
+original copyright headers.
+
+The `.m` files in `matlab/` are the reference implementations used for verification; files derived from published
+toolboxes keep their original headers.
+
+Questions, bug reports and new metric ports: [GitHub Issues](https://github.com/VuVietAnh2309/fusion-metrics/issues).

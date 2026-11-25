@@ -1,0 +1,27 @@
+fusion-metrics — third-party notices
+====================================
+
+The Python package is released under the MIT License (see LICENSE), EXCEPT for the
+parts listed below, which are translations of third-party MATLAB code and remain under
+their original authors' terms. Those terms allow use, copying and modification for
+EDUCATIONAL AND RESEARCH PURPOSES ONLY, without fee, provided the copyright notice and
+the original authors' names are kept, and the authors are cited in any publication that
+uses the code. Commercial use of these parts requires permission from their authors.
+
+Python port                          Original work
+-----------------------------------  ------------------------------------------------------
+fusion_metrics/fsim.py  (Q_FSIM)     FSIM — Copyright (c) 2010 Lin Zhang, Lei Zhang,
+                                     Xuanqin Mou and David Zhang. Phase congruency
+                                     (phasecong2, lowpassfilter) after Peter Kovesi.
+fusion_metrics/info.py  (Q_VIFF)     VIFF — Copyright (c) 2012 Yu Han. "A new image fusion
+                                     performance metric based on visual information
+                                     fidelity", Information Fusion 14 (2013).
+fusion_metrics/variants.py           VIF — H. R. Sheikh and A. C. Bovik, "Image information
+  (VIF_Sheikh)                       and visual quality", IEEE TIP 15 (2006), LIVE / The
+                                     University of Texas at Austin.
+
+The MATLAB reference files in matlab/ and matlab_added/ are distributed for
+verification. Files that carry their own copyright notice keep it unchanged and are
+governed by it, in particular: Q_FSIM.m, Q_VIFF.m, Q_S.m and MS_SSIM.m (SSIM,
+Copyright (c) 2003 Zhou Wang), and Q_UIQI.m (Copyright (c) 2001 The University of Texas
+at Austin).
