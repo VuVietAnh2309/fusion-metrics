@@ -187,7 +187,7 @@ If `fusion-metrics` helps your work, please cite it (GitHub's **“Cite this rep
   author  = {Vu, Viet Anh},
   title   = {fusion-metrics: MATLAB-faithful objective quality metrics for image fusion},
   year    = {2026},
-  version = {1.0.0},
+  version = {1.0.1},
   url     = {https://github.com/VuVietAnh2309/fusion-metrics}
 }
 ```

@@ -3,8 +3,8 @@ message: "If you use fusion-metrics, please cite it as below, and also cite the 
 title: "fusion-metrics: MATLAB-faithful objective quality metrics for image fusion"
 type: software
 license: MIT
-version: 1.0.0
-date-released: 2026-11-25
+version: 1.0.1
+date-released: 2026-11-26
 repository-code: "https://github.com/VuVietAnh2309/fusion-metrics"
 authors:
   - family-names: Vu

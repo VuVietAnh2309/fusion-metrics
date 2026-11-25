@@ -16,7 +16,7 @@ from .fsim import Q_FSIM
 from .fmi import Q_FMI, edge_sobel
 from .variants import AG_VIFB, VIF_Sheikh
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __author__ = "Vu Viet Anh (Vũ Việt Anh)"
 __email__ = "vietanhresearcher@gmail.com"
 
