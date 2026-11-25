@@ -8,6 +8,7 @@ Developed by **[Vu Viet Anh](https://vuvietanh2309.github.io/)** (Vũ Việt Anh
 
 [![tests](https://github.com/VuVietAnh2309/fusion-metrics/actions/workflows/test.yml/badge.svg)](https://github.com/VuVietAnh2309/fusion-metrics/actions/workflows/test.yml)
 [![PyPI](https://img.shields.io/pypi/v/fusion-metrics?color=3775A9&logo=pypi&logoColor=white)](https://pypi.org/project/fusion-metrics/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24536175.svg)](https://doi.org/10.5281/zenodo.24536175)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/LICENSE)
 ![Python](https://img.shields.io/badge/python-3.10–3.13-3776AB?logo=python&logoColor=white)
 ![Metrics](https://img.shields.io/badge/metrics-18-8957e5)
@@ -188,6 +189,7 @@ If `fusion-metrics` helps your work, please cite it (GitHub's **“Cite this rep
   title   = {fusion-metrics: MATLAB-faithful objective quality metrics for image fusion},
   year    = {2026},
   version = {1.0.1},
+  doi     = {10.5281/zenodo.24536175},
   url     = {https://github.com/VuVietAnh2309/fusion-metrics}
 }
 ```
