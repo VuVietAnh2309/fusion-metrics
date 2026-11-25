@@ -7,6 +7,7 @@
 Developed by **[Vu Viet Anh](https://vuvietanh2309.github.io/)** (Vũ Việt Anh) · AI Engineer & Researcher, Hanoi University of Science and Technology
 
 [![tests](https://github.com/VuVietAnh2309/fusion-metrics/actions/workflows/test.yml/badge.svg)](https://github.com/VuVietAnh2309/fusion-metrics/actions/workflows/test.yml)
+[![PyPI](https://img.shields.io/pypi/v/fusion-metrics?color=3775A9&logo=pypi&logoColor=white)](https://pypi.org/project/fusion-metrics/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/LICENSE)
 ![Python](https://img.shields.io/badge/python-3.10–3.13-3776AB?logo=python&logoColor=white)
 ![Metrics](https://img.shields.io/badge/metrics-18-8957e5)
@@ -39,7 +40,7 @@ score differently from paper to paper.
 ## 🚀 Quick start
 
 ```bash
-pip install git+https://github.com/VuVietAnh2309/fusion-metrics.git
+pip install fusion-metrics
 ```
 
 ```python

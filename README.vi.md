@@ -25,7 +25,7 @@ Kết quả là cùng một phương pháp nhưng mỗi bài ra một số.
 ## Cài đặt và dùng thử
 
 ```bash
-pip install git+https://github.com/VuVietAnh2309/fusion-metrics.git
+pip install fusion-metrics
 ```
 
 ```python
