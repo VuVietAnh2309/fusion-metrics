@@ -1,9 +1,9 @@
 # fusion-metrics — Copyright (c) 2026 Vu Viet Anh (Vũ Việt Anh) <vietanhresearcher@gmail.com>
 # MIT License (third-party-derived metrics: see NOTICE). https://github.com/VuVietAnh2309/fusion-metrics
-"""Ports of Q_ABF.m, Q_VIFF.m, Q_M.m, Q_NCIE.m, Q_TE_Nava.m. Argument order (A, B, F)."""
+"""Ports of Q_ABF.m, Q_VIFF.m, Q_M.m, Q_NCIE.m, Q_NMI.m, Q_CE.m, Q_TE_Nava.m. Argument order (A, B, F)."""
 import numpy as np
 
-from ._matlab import as_double, conv2_same, filter2_valid, fspecial_gaussian, mround
+from ._matlab import as_double, conv2_same, filter2_valid, fspecial_gaussian, mround, to_uint8
 
 
 # ---------------------------------------------------------------- Q_ABF.m (Petrovic Q^{AB/F})
@@ -163,6 +163,58 @@ def Q_NCIE(A, B, F):
     return float(1 - HR)
 
 
+# ---------------------------------------------------------------- Q_NMI.m (Hossny et al.)
+def _mutual_info(im1, im2):
+    """mutual_info.m (Z. Liu): joint histogram h(im1+1, im2+1) -> (MI, H_xy, H_x, H_y).
+    As in the .m file, H_x is computed from the column sums (the marginal of im2) and H_y from
+    the row sums (the marginal of im1); Q_NMI only uses their sum, so the naming does not matter."""
+    h = np.bincount((im1.astype(np.int64).ravel() * 256 + im2.astype(np.int64).ravel()),
+                    minlength=256 * 256).reshape(256, 256).astype(np.float64)
+    h = h / h.sum()
+    m1 = h.sum(axis=0)
+    m2 = h.sum(axis=1)
+    H_x = -np.sum(m1 * np.log2(m1 + (m1 == 0)))
+    H_y = -np.sum(m2 * np.log2(m2 + (m2 == 0)))
+    H_xy = -np.sum(h * np.log2(h + (h == 0)))
+    return H_x + H_y - H_xy, H_xy, H_x, H_y
+
+
+def Q_NMI(A, B, F):
+    """Normalized mutual information 2*[MI(A,F)/(H(A)+H(F)) + MI(B,F)/(H(B)+H(F))]
+    (Q_NMI.m; inputs min-max normalised and rounded to 0..255 by normalize1)."""
+    a, b, f = _normalize1(A), _normalize1(B), _normalize1(F)
+    I_fx, _, H_x, H_f1 = _mutual_info(a, f)
+    I_fy, _, H_y, H_f2 = _mutual_info(b, f)
+    return float(2 * (I_fx / (H_f1 + H_x) + I_fy / (H_f2 + H_y)))
+
+
+# ---------------------------------------------------------------- Q_CE.m (cross entropy)
+def _prepare_image(img):
+    """prepare_image in Q_CE.m: uint8 is kept; otherwise double, x255 when max <= 1, clipped to
+    [0, 255] and converted with uint8() (round halves away from zero)."""
+    img = np.asarray(img)
+    if img.dtype == np.uint8:
+        return img
+    img = img.astype(np.float64)
+    if img.max() <= 1:
+        img = img * 255
+    return to_uint8(np.clip(img, 0, 255))
+
+
+def _kl(hP, hF):
+    mask = hP > 0
+    return float(np.sum(hP[mask] * np.log2(hP[mask] / np.maximum(hF[mask], 1e-12))))
+
+
+def Q_CE(A, B, F):
+    """Cross entropy 0.5*[D_KL(h_A||h_F) + D_KL(h_B||h_F)] of the 256-bin histograms
+    (Q_CE.m; lower is better)."""
+    hA, hB, hF = (np.bincount(_prepare_image(X).ravel(), minlength=256).astype(np.float64)
+                  for X in (A, B, F))
+    hA, hB, hF = hA / hA.sum(), hB / hB.sum(), hF / hF.sum()
+    return 0.5 * (_kl(hA, hF) + _kl(hB, hF))
+
+
 # ---------------------------------------------------------------- Q_TE_Nava.m (Tsallis)
 def _tsallis_entropy(X, q):
     c = np.bincount(X.ravel(), minlength=256).astype(np.float64)
@@ -184,7 +236,6 @@ def _tsallis_mi(X, Y, q):
 
 def Q_TE_Nava(A, B, F, q=0.43137):
     """Tsallis-entropy fusion metric, Nava et al. normalisation (Q_TE_Nava.m)."""
-    from ._matlab import to_uint8
     a, b, f = (to_uint8(as_double(X)).astype(np.int64) for X in (A, B, F))
     I_FA = _tsallis_mi(f, a, q)
     I_FB = _tsallis_mi(f, b, q)
@@ -194,4 +245,4 @@ def Q_TE_Nava(A, B, F, q=0.43137):
     return float((I_FA + I_FB) / (H_A + H_B - I_AB))
 
 
-__all__ = ["Q_ABF", "Q_VIFF", "Q_M", "Q_NCIE", "Q_TE_Nava"]
+__all__ = ["Q_ABF", "Q_VIFF", "Q_M", "Q_NCIE", "Q_NMI", "Q_CE", "Q_TE_Nava"]

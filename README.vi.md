@@ -34,7 +34,7 @@ import fusion_metrics as fm
 A, B, F = fm.read_gray("MRI.png"), fm.read_gray("PET.png"), fm.read_gray("fused.png")
 fm.Q_ABF(A, B, F)                     # một metric
 fm.evaluate(A, B, F, "information")   # một nhóm metric
-fm.evaluate(A, B, F)                  # cả 18 metric
+fm.evaluate(A, B, F)                  # cả 24 metric
 ```
 
 Dòng lệnh:
@@ -45,7 +45,7 @@ fusion-metrics --dirs data/MRI data/PET results/MyMethod --csv mymethod.csv   # 
 python verify/selftest.py                                                     # tự kiểm tra, in "ALL OK"
 ```
 
-Các nhóm metric có sẵn: `image`, `information`, `feature`, `similarity`, `all`. Danh sách đầy đủ, nguồn trích dẫn của
+Các nhóm metric có sẵn: `image`, `information`, `feature`, `structural`, `similarity`, `ivif6`, `all`. Danh sách đầy đủ, nguồn trích dẫn của
 từng metric và các quy ước làm thay đổi kết quả (đổi ảnh xám, kiểu dữ liệu `uint8`, `edge()`…) có trong
 [README tiếng Anh](README.md).
 
@@ -54,6 +54,8 @@ từng metric và các quy ước làm thay đổi kết quả (đổi ảnh xá
 - Đọc ảnh bằng `read_gray` (giống MATLAB `imread` + `rgb2gray`) để ra đúng số của MATLAB. `cv2.imread(path, 0)` cho kết
   quả khác.
 - `Q_AG` khác `AG_VIFB`, và `Q_VIFF` (Han et al.) khác `VIF_Sheikh` (Sheikh & Bovik). Khi báo cáo, ghi rõ dùng metric nào.
+- `MS_SSIM` thực ra là SSIM một thang (lấy trung bình SSIM(A,F) và SSIM(B,F)), đúng như file `.m` gốc.
+- `Q_UIQI` giữ đúng hành vi của `UIQI.m`: file này không đổi ảnh sang double, nên với ảnh `uint8` các phép bình phương bị bão hoà ở 255 như trong MATLAB. Muốn có UIQI theo định nghĩa gốc thì truyền ảnh `float64`.
 - Khi dùng, hãy trích dẫn cả thư viện và **bài báo gốc của từng metric**.
 
 ## Tác giả

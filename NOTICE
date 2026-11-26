@@ -16,6 +16,14 @@ fusion_metrics/fsim.py  (Q_FSIM)     FSIM — Copyright (c) 2010 Lin Zhang, Lei 
 fusion_metrics/info.py  (Q_VIFF)     VIFF — Copyright (c) 2012 Yu Han. "A new image fusion
                                      performance metric based on visual information
                                      fidelity", Information Fusion 14 (2013).
+fusion_metrics/structural.py         SSIM — Copyright (c) 2003 Zhou Wang (ssim_index.m).
+  (MS_SSIM)                          Z. Wang, A. C. Bovik, H. R. Sheikh and E. P. Simoncelli,
+                                     "Image quality assessment: from error visibility to
+                                     structural similarity", IEEE TIP 13 (2004).
+fusion_metrics/structural.py         UIQI — Copyright (c) 2001 The University of Texas at
+  (Q_UIQI)                           Austin, Zhou Wang (img_qi / UIQI.m). Z. Wang and A. C.
+                                     Bovik, "A universal image quality index", IEEE Signal
+                                     Process. Lett. 9 (2002).
 fusion_metrics/variants.py           VIF — H. R. Sheikh and A. C. Bovik, "Image information
   (VIF_Sheikh)                       and visual quality", IEEE TIP 15 (2006), LIVE / The
                                      University of Texas at Austin.

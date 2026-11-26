@@ -48,6 +48,11 @@ def python_values(S, names):
             if n == "Q_FMI_core":
                 row[n] = M.Q_FMI(S[f"EA{k}"].astype(float), S[f"EB{k}"].astype(float),
                                  S[f"EF{k}"].astype(float), feature="none")
+            elif n.endswith("_double") or n.endswith("_unit"):     # same metric, other input class
+                base, scale = (n[:-7], 1.0) if n.endswith("_double") else (n[:-5], 255.0)
+                fn, src = M.METRICS[base]
+                a, b, f = (X.astype(np.float64) / scale for X in (A, B, F))
+                row[n] = fn(a, b, f) if src else fn(f)
             else:
                 fn, src = M.METRICS[n]
                 row[n] = fn(A, B, F) if src else fn(F)

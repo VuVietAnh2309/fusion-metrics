@@ -5,7 +5,19 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-11-26
+
 ### Added
+- Six metrics ported line by line from their `.m` files and verified against them (≤ 1.4e-13 on synthetic and on
+  194 real cases): `Q_CI` (contrast index = SD), `Q_EI` (edge intensity), `Q_CE` (cross entropy), `Q_NMI`
+  (normalized mutual information), `MS_SSIM` (SSIM averaged over the two sources) and `Q_UIQI` (universal image
+  quality index). With them the package covers SD and SSIM, completing the six statistics most infrared–visible
+  fusion papers report.
+- Presets `structural` (`MS_SSIM`, `Q_UIQI`) and `ivif6` (`Q_En`, `Q_CI`, `SF`, `AG_VIFB`, `Q_MI`, `MS_SSIM`);
+  `image` and `information` now include the new no-reference and information metrics.
+- MATLAB helpers `imfilter_conv_replicate` (`imfilter(..., 'replicate', 'conv')`) and `mtimes_elem` (MATLAB
+  class rules for element-wise products, used by `Q_UIQI` on `uint8` input).
+- Self-test: the new metrics, plus `Q_UIQI` and `Q_CE` on `float64` and [0, 1] inputs.
 - `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue and pull-request templates.
 - API reference with worked examples (`docs/API.md`).
 
@@ -24,6 +36,7 @@ All notable changes to this project are documented here. The format follows
 - `fusion-metrics` command-line tool (single image or whole folders → CSV/JSON).
 - Self-test against Octave reference values; CI on Python 3.10–3.13; PyPI release via Trusted Publishing.
 
-[Unreleased]: https://github.com/VuVietAnh2309/fusion-metrics/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/VuVietAnh2309/fusion-metrics/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/VuVietAnh2309/fusion-metrics/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/VuVietAnh2309/fusion-metrics/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/VuVietAnh2309/fusion-metrics/releases/tag/v1.0.0

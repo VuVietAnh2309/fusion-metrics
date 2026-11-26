@@ -11,7 +11,7 @@ Developed by **[Vu Viet Anh](https://vuvietanh2309.github.io/)** (Vũ Việt Anh
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24536175.svg)](https://doi.org/10.5281/zenodo.24536175)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/LICENSE)
 ![Python](https://img.shields.io/badge/python-3.10–3.13-3776AB?logo=python&logoColor=white)
-![Metrics](https://img.shields.io/badge/metrics-18-8957e5)
+![Metrics](https://img.shields.io/badge/metrics-24-8957e5)
 ![Agreement with MATLAB](https://img.shields.io/badge/agreement_with_MATLAB-%E2%89%A41e--12-2ea043)
 
 [Quick start](#-quick-start) · [Metrics](#-metrics) · [API docs](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/docs/API.md) · [CLI](#-command-line) · [Verification](#-verification) · [Citation](#-citation) · [Tiếng Việt](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/README.vi.md)
@@ -53,7 +53,7 @@ F = fm.read_gray("fused.png")
 
 fm.Q_ABF(A, B, F)                       # one metric
 fm.evaluate(A, B, F, "information")     # a preset -> {"Q_MI": ..., "Q_NCIE": ..., ...}
-fm.evaluate(A, B, F)                    # all 18 metrics
+fm.evaluate(A, B, F)                    # all 24 metrics
 ```
 
 ## 📐 Metrics
@@ -70,7 +70,11 @@ Inputs are grayscale `uint8` or `double` in [0, 255].
 | `SF(F)` | Spatial frequency (4 directions) | Eskicioglu & Fisher, *IEEE TCOM* 1995 |
 | `Q_AG(F)` | Average gradient (forward differences, [0, 1]) | — |
 | `AG_VIFB(F)` | Average gradient, VIFB definition (0–255) | Zhang et al., VIFB, *CVPRW* 2020 |
+| `Q_CI(F)` | Contrast index = standard deviation (SD) on [0, 1] | Rao, *Int. J. Remote Sens.* 1997 |
+| `Q_EI(F)` | Edge intensity (Sobel), √Σ(Sx²+Sy²) / (M·N) | Rajalingam & Priya, *IJESI* 2018 |
 | `Q_MI(A,B,F)` | Mutual information MI(A,F) + MI(B,F), bits | Qu et al., *Electron. Lett.* 2002 |
+| `Q_NMI(A,B,F)` | Normalized mutual information | Hossny et al., *Electron. Lett.* 2008 |
+| `Q_CE(A,B,F)` | Cross entropy of the histograms (lower = better) | Bulanon et al., *Biosyst. Eng.* 2009 |
 | `Q_NCIE(A,B,F)` | Nonlinear correlation information entropy | Wang, Shen & Jin, 2008 |
 | `Q_TE_Nava(A,B,F)` | Tsallis entropy, q = 0.43137 | Nava et al., *Proc. SPIE* 2007 |
 | `Q_FMI(A,B,F)` | Feature mutual information on edge maps, w = 3 | Haghighat et al., *Comput. Electr. Eng.* 2011 |
@@ -78,6 +82,8 @@ Inputs are grayscale `uint8` or `double` in [0, 255].
 | `Q_M(A,B,F)` | Multiscale edge preservation (Haar, 2 levels) | Wang & Liu, *ICSP* 2008 |
 | `Q_SF(A,B,F)` | Relative spatial-frequency error | Zheng et al., *Inf. Fusion* 2007 |
 | `Q_FSIM(A,B,F)` | Feature similarity, (FSIM(A,F) + FSIM(B,F)) / 2 | Zhang et al., *IEEE TIP* 2011 |
+| `MS_SSIM(A,B,F)` | SSIM, (SSIM(A,F) + SSIM(B,F)) / 2 — single-scale despite the file name | Wang et al., *IEEE TIP* 2004 |
+| `Q_UIQI(A,B,F)` | Universal image quality index, (UIQI(A,F) + UIQI(B,F)) / 2 | Wang & Bovik, *IEEE SPL* 2002 |
 | `Q_PSNR(A,B,F)` | Mean of PSNR(F,A) and PSNR(F,B) | — |
 | `Q_CC(A,B,F)` | Mean correlation coefficient | — |
 | `Q_SCD(A,B,F)` | Sum of the correlations of differences | Aslantas & Bendes, *AEU* 2015 |
@@ -90,16 +96,21 @@ enhancement in night vision”*, IEEE TPAMI 2012. **Please cite the original pap
 > [!NOTE]
 > Two pairs look alike but are different metrics: `Q_AG` vs `AG_VIFB` (different differences and scale), and
 > `Q_VIFF` (Han et al.) vs `VIF_Sheikh` (Sheikh & Bovik). State which one you use.
+> `Q_CI` (SD) and `Q_EI` work on different scales: `Q_CI` on [0, 1], `Q_EI` on the input scale.
+> `Q_UIQI` follows `UIQI.m`, which does not convert its inputs to double: with `uint8` images the products
+> inside it saturate at 255 exactly as in MATLAB. Pass `float64` images for the textbook UIQI.
 
 ### Presets
 
 | Preset | Metrics |
 |---|---|
-| `image` | `Q_MLI`, `Q_En`, `SF`, `AG_VIFB` |
-| `information` | `Q_MI`, `Q_NCIE`, `Q_TE_Nava`, `Q_FMI` |
+| `image` | `Q_MLI`, `Q_En`, `Q_CI`, `SF`, `AG_VIFB`, `Q_EI` |
+| `information` | `Q_MI`, `Q_NMI`, `Q_NCIE`, `Q_TE_Nava`, `Q_FMI`, `Q_CE` |
 | `feature` | `Q_ABF`, `Q_M`, `Q_SF`, `Q_FSIM` |
+| `structural` | `MS_SSIM`, `Q_UIQI` |
 | `similarity` | `Q_PSNR`, `Q_CC`, `Q_SCD`, `VIF_Sheikh`, `Q_VIFF` |
-| `all` | all 18 |
+| `ivif6` | `Q_En`, `Q_CI` (SD), `SF`, `AG_VIFB`, `Q_MI`, `MS_SSIM` — the six statistics most infrared–visible papers report |
+| `all` | all 24 |
 
 ## 💻 Command line
 
@@ -122,6 +133,9 @@ Add `--json` for machine-readable output, or `--reader cv` to use the OpenCV gra
   `cv2.imread(path, 0)` directly gives yet another result.
 - **Data type matters for `Q_MI`.** On `uint8` input MATLAB saturates `255 + 1` to 255, merging the top gray level into
   the previous histogram bin. The port reproduces this from the array's dtype — read images as `uint8`.
+- **Data type matters for `Q_UIQI`.** `UIQI.m` does not convert its inputs to double, so on `uint8` images the
+  squares and products inside it are `uint8` in MATLAB (rounded and saturated at 255). The port reproduces this from the
+  array's dtype; pass `float64` images to get the textbook UIQI.
 - **Edge maps for `Q_FMI`.** MATLAB's `edge()` thins edges inside a compiled mex file. The port reproduces its rule
   (non-maximum suppression with `<=` towards the left/upper and `<` towards the right/lower neighbour), which matches
   values computed in MATLAB.
@@ -138,14 +152,15 @@ The self-test scores 7 seeded synthetic cases chosen to hit every code path — 
 low range [0, 40], {0, 1} images, odd size 255×257, and 512×512 — and compares the Python values with those produced by
 the original `.m` files in GNU Octave:
 
-- **17/17 metrics agree** with relative error ≤ 1.7e-12 (most ≈ 1e-15), and `edge_sobel` reproduces the stored edge
-  maps pixel for pixel.
+- **All 23 checks agree** (the 24 metrics, with `Q_FMI` checked on stored edge maps, plus `Q_UIQI` and `Q_CE` on
+  `float64` and [0, 1] inputs) with relative error ≤ 1.7e-12 (most ≈ 1e-15), and `edge_sobel` reproduces the stored
+  edge maps pixel for pixel.
 - One documented exception: `Q_VIFF` on the *saturated* case differs by 2.7e-5. Its perfectly flat regions put local
   variances at round-off level, right at the `.m` file's 1e-10 thresholds, where the result depends on the summation
   order inside `filter2` (which differs between MATLAB, Octave and SciPy). On real images `Q_VIFF` agrees to 1e-14.
 
-A cross-check on real PET/SPECT–MRI pairs from the public Harvard Whole Brain Atlas gave the same picture: every metric
-within 4e-12 of the `.m` files on identical pixel arrays.
+A cross-check on 194 real PET/SPECT–MRI cases from the public Harvard Whole Brain Atlas gave the same picture: every
+metric within 4e-12 of the `.m` files on identical pixel arrays.
 
 <details>
 <summary><b>Regenerate the reference values (needs GNU Octave)</b></summary>

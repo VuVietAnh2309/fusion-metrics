@@ -80,5 +80,24 @@ def fspecial_gaussian(n, sigma):
     return h / s if s != 0 else h
 
 
+def imfilter_conv_replicate(x, k):
+    """MATLAB imfilter(x, k, 'replicate', 'same', 'conv') for an odd-sized kernel:
+    true convolution with border replication."""
+    k = np.asarray(k, dtype=np.float64)
+    r, c = k.shape[0] // 2, k.shape[1] // 2
+    p = np.pad(np.asarray(x, dtype=np.float64), ((r, r), (c, c)), mode="edge")
+    return correlate2d(p, k[::-1, ::-1], mode="valid")
+
+
+def mtimes_elem(a, b):
+    """MATLAB element-wise a.*b with MATLAB class rules: if either operand is uint8 the product
+    is computed in double, then rounded (halves away from zero) and saturated to uint8."""
+    a, b = np.asarray(a), np.asarray(b)
+    prod = a.astype(np.float64) * b.astype(np.float64)
+    if a.dtype == np.uint8 or b.dtype == np.uint8:
+        return to_uint8(prod)
+    return prod
+
+
 def as_double(x):
     return np.asarray(x).astype(np.float64)

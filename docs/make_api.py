@@ -46,6 +46,19 @@ INFO = {
                    "≥ 0, higher = better", "Sheikh & Bovik, IEEE Trans. Image Process. 2006"),
     "Q_VIFF": ("Visual information fidelity for fusion (VIFF).", "[0, 1], higher = better",
                "Han et al., Inf. Fusion 2013"),
+    "Q_CI": ("Contrast index: population standard deviation (SD) of F on the [0, 1] scale.",
+             "≥ 0, higher = more contrast", "Rao, Int. J. Remote Sens. 1997"),
+    "Q_EI": ("Edge intensity sqrt(sum(Sx² + Sy²)) / (M·N) with Sobel kernels, on the input scale.",
+             "≥ 0, higher = stronger edges", "Rajalingam & Priya, IJESI 2018"),
+    "Q_CE": ("Cross entropy 0.5·[KL(h_A‖h_F) + KL(h_B‖h_F)] of the 256-bin histograms.", "≥ 0, lower = better",
+             "Bulanon et al., Biosyst. Eng. 2009"),
+    "Q_NMI": ("Normalized mutual information 2·[MI(A,F)/(H(A)+H(F)) + MI(B,F)/(H(B)+H(F))].",
+              "[0, 2], higher = better", "Hossny et al., Electron. Lett. 2008"),
+    "MS_SSIM": ("SSIM (SSIM(A,F) + SSIM(B,F)) / 2, single-scale, 11×11 Gaussian window.", "[-1, 1], higher = better",
+                "Wang et al., IEEE Trans. Image Process. 2004"),
+    "Q_UIQI": ("Universal image quality index (UIQI(A,F) + UIQI(B,F)) / 2, 8×8 window. uint8 input follows MATLAB's "
+               "uint8 arithmetic inside UIQI.m; pass float64 for the textbook index.", "[-1, 1], higher = better",
+               "Wang & Bovik, IEEE Signal Process. Lett. 2002"),
 }
 
 

@@ -1,13 +1,14 @@
 # fusion-metrics — Copyright (c) 2026 Vu Viet Anh (Vũ Việt Anh) <vietanhresearcher@gmail.com>
 # MIT License (third-party-derived metrics: see NOTICE). https://github.com/VuVietAnh2309/fusion-metrics
-"""Line-by-line ports of Q_MLI.m, Q_AG.m, Q_En.m, Q_SF.m, Q_PSNR.m, Q_CC.m, Q_SCD.m, Q_MI.m.
+"""Line-by-line ports of Q_MLI.m, Q_AG.m, Q_En.m, Q_CI.m, Q_EI.m, Q_SF.m, Q_PSNR.m, Q_CC.m, Q_SCD.m,
+Q_MI.m.
 
 Inputs follow the MATLAB files: grayscale images, uint8 or double with values in [0, 255]
 (Q_MLI, Q_AG, Q_En also accept [0, 1]). Argument order is the MATLAB order: (A, B, F).
 """
 import numpy as np
 
-from ._matlab import EPS, as_double, mround
+from ._matlab import EPS, as_double, imfilter_conv_replicate, mround
 
 
 def _unit_range(F, name):
@@ -41,6 +42,24 @@ def Q_En(F):
     p = np.bincount(u.ravel(), minlength=256).astype(np.float64)
     p = p[p != 0] / u.size
     return float(-np.sum(p * np.log2(p)))
+
+
+def Q_CI(F):
+    """Contrast index = population standard deviation on the [0, 1] scale (Q_CI.m: std(F(:), 1))."""
+    I = _unit_range(F, "Q_CI")
+    return float(np.std(I.ravel(), ddof=0))
+
+
+def Q_EI(F):
+    """Edge intensity sqrt(sum(Sx^2 + Sy^2)) / (M*N) with Sobel kernels (Q_EI.m:
+    imfilter(..., 'replicate', 'same', 'conv'), on the input scale)."""
+    img = as_double(F)
+    M, N = img.shape
+    hx = np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]], dtype=np.float64)
+    hy = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]], dtype=np.float64)
+    Sx = imfilter_conv_replicate(img, hx)
+    Sy = imfilter_conv_replicate(img, hy)
+    return float(np.sqrt(np.sum(Sx.ravel() ** 2 + Sy.ravel() ** 2)) / (M * N))
 
 
 # ---------------------------------------------------------------- spatial frequency (Q_SF.m)
@@ -157,4 +176,4 @@ def Q_MI(A, B, F, grey_level=256, uint8_input=None):
     return float((HA + HF - Hab(idx["F"], idx["A"])) + (HB + HF - Hab(idx["F"], idx["B"])))
 
 
-__all__ = ["Q_MLI", "Q_AG", "Q_En", "SF", "Q_SF", "Q_PSNR", "Q_CC", "Q_SCD", "Q_MI", "mround"]
+__all__ = ["Q_MLI", "Q_AG", "Q_En", "Q_CI", "Q_EI", "SF", "Q_SF", "Q_PSNR", "Q_CC", "Q_SCD", "Q_MI", "mround"]
