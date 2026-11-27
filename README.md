@@ -14,7 +14,7 @@ Developed by **[Vu Viet Anh](https://vuvietanh2309.github.io/)** (Vũ Việt Anh
 ![Metrics](https://img.shields.io/badge/metrics-24-8957e5)
 ![Agreement with MATLAB](https://img.shields.io/badge/agreement_with_MATLAB-%E2%89%A41e--12-2ea043)
 
-[Quick start](#-quick-start) · [Metrics](#-metrics) · [API docs](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/docs/API.md) · [CLI](#-command-line) · [Verification](#-verification) · [Citation](#-citation) · [Tiếng Việt](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/README.vi.md)
+[Quick start](#-quick-start) · [Metrics](#-metrics) · [API docs](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/docs/API.md) · [CLI](#-command-line) · [Verification](#-verification) · [Citation](#-citation) · [Tiếng Việt](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/README.vi.md) · [中文](https://github.com/VuVietAnh2309/fusion-metrics/blob/main/README.zh.md)
 
 </div>
 
