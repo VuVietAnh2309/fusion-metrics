@@ -41,8 +41,9 @@ PRESETS = {
     "feature": ["Q_ABF", "Q_M", "Q_SF", "Q_FSIM"],                     # edges / features
     "structural": ["MS_SSIM", "Q_UIQI"],                               # structural similarity
     "similarity": ["Q_PSNR", "Q_CC", "Q_SCD", "VIF_Sheikh", "Q_VIFF"],  # similarity to sources
-    # the six statistics most infrared-visible fusion papers report
-    "ivif6": ["Q_En", "Q_CI", "SF", "AG_VIFB", "Q_MI", "MS_SSIM"],
+    # the table most infrared-visible fusion papers report (CDDFuse, DDFM, ...):
+    # EN, SD, SF, MI, SCD, VIF, Qabf, SSIM
+    "ivif": ["Q_En", "Q_CI", "SF", "Q_MI", "Q_SCD", "VIF_Sheikh", "Q_ABF", "MS_SSIM"],
 }
 PRESETS["all"] = list(METRICS)
 

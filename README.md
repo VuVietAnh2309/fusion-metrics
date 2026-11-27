@@ -109,7 +109,7 @@ enhancement in night vision”*, IEEE TPAMI 2012. **Please cite the original pap
 | `feature` | `Q_ABF`, `Q_M`, `Q_SF`, `Q_FSIM` |
 | `structural` | `MS_SSIM`, `Q_UIQI` |
 | `similarity` | `Q_PSNR`, `Q_CC`, `Q_SCD`, `VIF_Sheikh`, `Q_VIFF` |
-| `ivif6` | `Q_En`, `Q_CI` (SD), `SF`, `AG_VIFB`, `Q_MI`, `MS_SSIM` — the six statistics most infrared–visible papers report |
+| `ivif` | `Q_En` (EN), `Q_CI` (SD), `SF`, `Q_MI` (MI), `Q_SCD` (SCD), `VIF_Sheikh` (VIF), `Q_ABF` (Qabf), `MS_SSIM` (SSIM) — the table most infrared–visible fusion papers report (CDDFuse, DDFM, …) |
 | `all` | all 24 |
 
 ## 💻 Command line

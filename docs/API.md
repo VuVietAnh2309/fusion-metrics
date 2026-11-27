@@ -25,7 +25,7 @@ F = ((A.astype(np.float64) + B) / 2).round().astype(np.uint8)   # naive average 
 
 ### `evaluate(A, B, F, names=None) -> dict[str, float]`
 
-Compute several metrics at once. `names` is a list of metric names, a preset name (`image`, `information`, `feature`, `structural`, `similarity`, `ivif6`, `all`), or `None` for all metrics.
+Compute several metrics at once. `names` is a list of metric names, a preset name (`image`, `information`, `feature`, `structural`, `similarity`, `ivif`, `all`), or `None` for all metrics.
 
 ```python
 >>> fm.evaluate(A, B, F, "feature")
@@ -80,7 +80,7 @@ Shannon entropy of the fused image (information content).
 
 - **Range / direction:** bits, higher = more information
 - **Reference:** Roberts et al., J. Appl. Remote Sens. 2008
-- **Presets:** `image`, `ivif6`
+- **Presets:** `image`, `ivif`
 - **Source:** `fusion_metrics/basic.py`
 
 ```python
@@ -94,7 +94,7 @@ Spatial frequency over rows, columns and both diagonals (activity / sharpness).
 
 - **Range / direction:** ≥ 0, higher = sharper
 - **Reference:** Eskicioglu & Fisher, IEEE Trans. Commun. 1995
-- **Presets:** `image`, `ivif6`
+- **Presets:** `image`, `ivif`
 - **Source:** `fusion_metrics/basic.py`
 
 ```python
@@ -150,7 +150,7 @@ Sum of the correlations of differences.
 
 - **Range / direction:** ≤ 2, higher = better
 - **Reference:** Aslantas & Bendes, AEU Int. J. Electron. Commun. 2015
-- **Presets:** `similarity`
+- **Presets:** `similarity`, `ivif`
 - **Source:** `fusion_metrics/basic.py`
 
 ```python
@@ -164,7 +164,7 @@ Mutual information MI(A,F) + MI(B,F).
 
 - **Range / direction:** bits, higher = better
 - **Reference:** Qu et al., Electron. Lett. 2002
-- **Presets:** `information`, `ivif6`
+- **Presets:** `information`, `ivif`
 - **Source:** `fusion_metrics/basic.py`
 
 ```python
@@ -178,7 +178,7 @@ Edge-strength-and-orientation preservation Q^AB/F.
 
 - **Range / direction:** [0, 1], higher = better
 - **Reference:** Xydeas & Petrović, Electron. Lett. 2000
-- **Presets:** `feature`
+- **Presets:** `feature`, `ivif`
 - **Source:** `fusion_metrics/info.py`
 
 ```python
@@ -276,7 +276,7 @@ Contrast index: population standard deviation (SD) of F on the [0, 1] scale.
 
 - **Range / direction:** ≥ 0, higher = more contrast
 - **Reference:** Rao, Int. J. Remote Sens. 1997
-- **Presets:** `image`, `ivif6`
+- **Presets:** `image`, `ivif`
 - **Source:** `fusion_metrics/basic.py`
 
 ```python
@@ -332,7 +332,7 @@ SSIM (SSIM(A,F) + SSIM(B,F)) / 2, single-scale, 11×11 Gaussian window.
 
 - **Range / direction:** [-1, 1], higher = better
 - **Reference:** Wang et al., IEEE Trans. Image Process. 2004
-- **Presets:** `structural`, `ivif6`
+- **Presets:** `structural`, `ivif`
 - **Source:** `fusion_metrics/structural.py`
 
 ```python
@@ -360,7 +360,7 @@ Average gradient as defined in the VIFB benchmark (central differences, 0–255 
 
 - **Range / direction:** ≥ 0, higher = sharper
 - **Reference:** Zhang et al., VIFB, CVPR Workshops 2020
-- **Presets:** `image`, `ivif6`
+- **Presets:** `image`
 - **Source:** `fusion_metrics/variants.py`
 
 ```python
@@ -374,7 +374,7 @@ Visual information fidelity VIF(A,F) + VIF(B,F), pixel-domain multiscale.
 
 - **Range / direction:** ≥ 0, higher = better
 - **Reference:** Sheikh & Bovik, IEEE Trans. Image Process. 2006
-- **Presets:** `similarity`
+- **Presets:** `similarity`, `ivif`
 - **Source:** `fusion_metrics/variants.py`
 
 ```python

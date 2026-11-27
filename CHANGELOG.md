@@ -11,9 +11,10 @@ All notable changes to this project are documented here. The format follows
 - Six metrics ported line by line from their `.m` files and verified against them (≤ 1.4e-13 on synthetic and on
   194 real cases): `Q_CI` (contrast index = SD), `Q_EI` (edge intensity), `Q_CE` (cross entropy), `Q_NMI`
   (normalized mutual information), `MS_SSIM` (SSIM averaged over the two sources) and `Q_UIQI` (universal image
-  quality index). With them the package covers SD and SSIM, completing the six statistics most infrared–visible
-  fusion papers report.
-- Presets `structural` (`MS_SSIM`, `Q_UIQI`) and `ivif6` (`Q_En`, `Q_CI`, `SF`, `AG_VIFB`, `Q_MI`, `MS_SSIM`);
+  quality index). With them the package covers SD and SSIM, completing the metric table most infrared–visible
+  fusion papers report (EN, SD, SF, MI, SCD, VIF, Qabf, SSIM).
+- Presets `structural` (`MS_SSIM`, `Q_UIQI`) and `ivif` (`Q_En`, `Q_CI`, `SF`, `Q_MI`, `Q_SCD`, `VIF_Sheikh`,
+  `Q_ABF`, `MS_SSIM`, i.e. EN, SD, SF, MI, SCD, VIF, Qabf, SSIM);
   `image` and `information` now include the new no-reference and information metrics.
 - MATLAB helpers `imfilter_conv_replicate` (`imfilter(..., 'replicate', 'conv')`) and `mtimes_elem` (MATLAB
   class rules for element-wise products, used by `Q_UIQI` on `uint8` input).

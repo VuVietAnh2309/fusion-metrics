@@ -45,7 +45,7 @@ fusion-metrics --dirs data/MRI data/PET results/MyMethod --csv mymethod.csv   # 
 python verify/selftest.py                                                     # tự kiểm tra, in "ALL OK"
 ```
 
-Các nhóm metric có sẵn: `image`, `information`, `feature`, `structural`, `similarity`, `ivif6`, `all`. Danh sách đầy đủ, nguồn trích dẫn của
+Các nhóm metric có sẵn: `image`, `information`, `feature`, `structural`, `similarity`, `ivif`, `all`. Danh sách đầy đủ, nguồn trích dẫn của
 từng metric và các quy ước làm thay đổi kết quả (đổi ảnh xám, kiểu dữ liệu `uint8`, `edge()`…) có trong
 [README tiếng Anh](README.md).
 
