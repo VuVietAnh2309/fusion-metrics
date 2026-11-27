@@ -1,6 +1,6 @@
 # fusion-metrics (Tiếng Việt)
 
-[English](README.md)
+[English](README.md) · [中文](README.zh.md)
 
 **Bộ chỉ số đánh giá chất lượng dung hợp ảnh (image fusion), dịch từng dòng từ MATLAB và kiểm chứng khớp đến sai số làm tròn.**
 
