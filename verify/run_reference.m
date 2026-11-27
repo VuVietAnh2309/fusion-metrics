@@ -1,5 +1,6 @@
 % Compute the reference values of the self-test with the ORIGINAL .m files (GNU Octave).
 %   octave-cli run_reference.m     (reads reference_cases.mat, writes reference_values.mat)
+% Q_C / Q_Y: the reference is octave_exactflat/ (constant windows in exact arithmetic).
 % Shims (octave_shims/): dwt2 (Haar, absent in Octave) and imgradientxy (MATLAB boundary
 % convention). Q_FMI is evaluated with feature 'none' on stored Sobel edge maps, because
 % Octave's edge() thins differently from MATLAB's.
@@ -10,11 +11,13 @@ here = fileparts(mfilename('fullpath'));
 addpath(fullfile(here, '..', 'matlab'));
 addpath(fullfile(here, '..', 'matlab_added'));
 addpath(fullfile(here, 'octave_shims'));
+addpath(fullfile(here, 'octave_exactflat'));
 S = load(fullfile(here, 'reference_cases.mat'));
 names = {'Q_MLI','Q_AG','Q_En','Q_SF','Q_PSNR','Q_CC','Q_SCD','Q_MI','Q_ABF','Q_VIFF', ...
          'Q_M','Q_NCIE','Q_TE_Nava','Q_FSIM','AG_VIFB','VIF_Sheikh','Q_FMI_core', ...
          'Q_CI','Q_EI','Q_CE','Q_NMI','MS_SSIM','Q_UIQI', ...
-         'Q_UIQI_double','Q_CE_double','Q_CE_unit'};
+         'Q_UIQI_double','Q_CE_double','Q_CE_unit', ...
+         'Q_TE','Q_NABF','Q_S','Q_Sw','Q_Se','Q_C','Q_Y','Q_H','Q_CV','Q_CB','Q_P'};
 K = numel(S.names);
 R = nan(K, numel(names));
 for k = 1:K
@@ -34,6 +37,11 @@ for k = 1:K
     R(k,24) = Q_UIQI(double(A),double(B),double(F));
     R(k,25) = Q_CE(double(A),double(B),double(F));
     R(k,26) = Q_CE(double(A)/255,double(B)/255,double(F)/255);
+    R(k,27) = Q_TE(A,B,F); R(k,28) = Q_NABF(A,B,F);
+    R(k,29) = Q_S(A,B,F,1); R(k,30) = Q_S(A,B,F,2); R(k,31) = Q_S(A,B,F,3);
+    R(k,32) = Q_C_exactflat(A,B,F); R(k,33) = Q_Y_exactflat(A,B,F);   % see octave_exactflat/
+    R(k,34) = Q_H(A,B,F);
+    R(k,35) = real(Q_CV(A,B,F)); R(k,36) = Q_CB(A,B,F); R(k,37) = Q_P(A,B,F);
     printf('case %d/%d done\n', k, K); fflush(stdout);
 end
 save('-v7', fullfile(here, 'reference_values.mat'), 'R', 'names');

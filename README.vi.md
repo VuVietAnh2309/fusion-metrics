@@ -34,7 +34,7 @@ import fusion_metrics as fm
 A, B, F = fm.read_gray("MRI.png"), fm.read_gray("PET.png"), fm.read_gray("fused.png")
 fm.Q_ABF(A, B, F)                     # một metric
 fm.evaluate(A, B, F, "information")   # một nhóm metric
-fm.evaluate(A, B, F)                  # cả 24 metric
+fm.evaluate(A, B, F)                  # cả 35 metric
 ```
 
 Dòng lệnh:
@@ -45,7 +45,7 @@ fusion-metrics --dirs data/MRI data/PET results/MyMethod --csv mymethod.csv   # 
 python verify/selftest.py                                                     # tự kiểm tra, in "ALL OK"
 ```
 
-Các nhóm metric có sẵn: `image`, `information`, `feature`, `structural`, `similarity`, `ivif`, `all`. Danh sách đầy đủ, nguồn trích dẫn của
+Các nhóm metric có sẵn: `image`, `information`, `feature`, `structural`, `perception`, `similarity`, `ivif`, `liu2012` (đủ 12 metric của Liu et al., TPAMI 2012), `all`. Danh sách đầy đủ, nguồn trích dẫn của
 từng metric và các quy ước làm thay đổi kết quả (đổi ảnh xám, kiểu dữ liệu `uint8`, `edge()`…) có trong
 [README tiếng Anh](README.md).
 
@@ -56,6 +56,7 @@ từng metric và các quy ước làm thay đổi kết quả (đổi ảnh xá
 - `Q_AG` khác `AG_VIFB`, và `Q_VIFF` (Han et al.) khác `VIF_Sheikh` (Sheikh & Bovik). Khi báo cáo, ghi rõ dùng metric nào.
 - `MS_SSIM` thực ra là SSIM một thang (lấy trung bình SSIM(A,F) và SSIM(B,F)), đúng như file `.m` gốc.
 - `Q_UIQI` giữ đúng hành vi của `UIQI.m`: file này không đổi ảnh sang double, nên với ảnh `uint8` các phép bình phương bị bão hoà ở 255 như trong MATLAB. Muốn có UIQI theo định nghĩa gốc thì truyền ảnh `float64`.
+- `Q_C`, `Q_Y` (SSIM với C = 2e-16) và `Q_CB` (tỉ số của hai ảnh đã lọc FFT) vốn không ổn định số học ngay trong file `.m`: ở các vùng phẳng khác 0 (Q_C, Q_Y) hoặc nơi mẫu số qua 0 (Q_CB), MATLAB, Octave và NumPy cho kết quả khác nhau. Bản Python tính các cửa sổ phẳng bằng số học chính xác cho Q_C/Q_Y; Q_CB chỉ tái lập được đến khoảng 1e-4 giữa các thư viện FFT. Chi tiết ở README tiếng Anh, mục *Verification*.
 - Khi dùng, hãy trích dẫn cả thư viện và **bài báo gốc của từng metric**.
 
 ## Tác giả

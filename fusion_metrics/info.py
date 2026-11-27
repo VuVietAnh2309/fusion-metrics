@@ -1,9 +1,11 @@
 # fusion-metrics — Copyright (c) 2026 Vu Viet Anh (Vũ Việt Anh) <vietanhresearcher@gmail.com>
 # MIT License (third-party-derived metrics: see NOTICE). https://github.com/VuVietAnh2309/fusion-metrics
-"""Ports of Q_ABF.m, Q_VIFF.m, Q_M.m, Q_NCIE.m, Q_NMI.m, Q_CE.m, Q_TE_Nava.m. Argument order (A, B, F)."""
+"""Ports of Q_ABF.m, Q_NABF.m, Q_VIFF.m, Q_M.m, Q_NCIE.m, Q_NMI.m, Q_CE.m, Q_TE.m, Q_TE_Nava.m.
+Argument order (A, B, F)."""
 import numpy as np
 
-from ._matlab import as_double, conv2_same, filter2_valid, fspecial_gaussian, mround, to_uint8
+from ._matlab import (as_double, conv2_same, filter2_valid, fspecial_gaussian, imfilter_corr_symmetric, mround,
+                      to_uint8)
 
 
 # ---------------------------------------------------------------- Q_ABF.m (Petrovic Q^{AB/F})
@@ -40,6 +42,50 @@ def Q_ABF(A, B, F):
     QAF, QBF = q(gA, aA), q(gB, aB)
     deno = np.sum(gA + gB)
     return 0.0 if deno == 0 else float(np.sum(QAF * gA + QBF * gB) / deno)
+
+
+# ---------------------------------------------------------------- Q_NABF.m (Kumar's modification)
+def Q_NABF(A, B, F):
+    """Fusion artifacts N_{AB/F} (Q_NABF.m, B. K. Shreyamsha Kumar's modified definition):
+    share of the weighted edge strength where F has stronger gradients than both sources and
+    the edge information is not preserved. Lower is better."""
+    Td, wt_min, Lg = 2, 0.001, 1.5
+    Nrg, kg, sigmag = 0.9999, 19, 0.5
+    Nra, ka, sigmaa = 0.9995, 22, 0.5
+    v = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], dtype=np.float64) / 8
+    h = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]], dtype=np.float64) / 8
+
+    def sobel(x):
+        x = as_double(x)
+        return imfilter_corr_symmetric(x, v), imfilter_corr_symmetric(x, h)
+    (gvA, ghA), (gvB, ghB), (gvF, ghF) = sobel(A), sobel(B), sobel(F)
+    gA, gB, gF = np.sqrt(ghA ** 2 + gvA ** 2), np.sqrt(ghB ** 2 + gvB ** 2), np.sqrt(ghF ** 2 + gvF ** 2)
+
+    def ratio(gS):
+        r = np.zeros_like(gS)
+        m = (gS > 0) & (gF > 0)
+        r[m] = np.minimum(gS[m], gF[m]) / np.maximum(gS[m], gF[m])
+        return r
+
+    def angle(gv, gh):
+        a = np.zeros_like(gv)
+        m = ~((gv == 0) & (gh == 0))
+        with np.errstate(divide="ignore"):
+            a[m] = np.arctan(gv[m] / gh[m])          # gh == 0 -> atan(+-Inf) = +-pi/2, as in MATLAB
+        return a
+    gAF, gBF = ratio(gA), ratio(gB)
+    aA, aB, aF = angle(gvA, ghA), angle(gvB, ghB), angle(gvF, ghF)
+    aAF = np.abs(np.abs(aA - aF) - np.pi / 2) * 2 / np.pi
+    aBF = np.abs(np.abs(aB - aF) - np.pi / 2) * 2 / np.pi
+    QAF = np.sqrt((Nrg / (1 + np.exp(-kg * (gAF - sigmag)))) * (Nra / (1 + np.exp(-ka * (aAF - sigmaa)))))
+    QBF = np.sqrt((Nrg / (1 + np.exp(-kg * (gBF - sigmag)))) * (Nra / (1 + np.exp(-ka * (aBF - sigmaa)))))
+    wtA = np.where(gA >= Td, gA ** Lg, wt_min)
+    wtB = np.where(gB >= Td, gB ** Lg, wt_min)
+    wt_sum = np.sum(wtA.ravel() + wtB.ravel())
+    if wt_sum == 0:
+        return 0.0
+    AM = ((gF > gA) & (gF > gB)).astype(np.float64)
+    return float(np.sum(AM * ((1 - QAF) * wtA + (1 - QBF) * wtB)) / wt_sum)
 
 
 # ---------------------------------------------------------------- Q_VIFF.m (Han et al. 2013)
@@ -234,6 +280,13 @@ def _tsallis_mi(X, Y, q):
     return (1 / (1 - q)) * (1 - np.sum((p ** q) / ((px[i] * py[k]) ** (q - 1))))
 
 
+def Q_TE(A, B, F, q=1.85):
+    """Tsallis-entropy mutual information I_q(A,F) + I_q(B,F) (Q_TE.m, Cvejic et al. 2006, eq. 9,
+    default q = 1.85)."""
+    a, b, f = (to_uint8(as_double(X)).astype(np.int64) for X in (A, B, F))
+    return float(_tsallis_mi(a, f, q) + _tsallis_mi(b, f, q))
+
+
 def Q_TE_Nava(A, B, F, q=0.43137):
     """Tsallis-entropy fusion metric, Nava et al. normalisation (Q_TE_Nava.m)."""
     a, b, f = (to_uint8(as_double(X)).astype(np.int64) for X in (A, B, F))
@@ -245,4 +298,4 @@ def Q_TE_Nava(A, B, F, q=0.43137):
     return float((I_FA + I_FB) / (H_A + H_B - I_AB))
 
 
-__all__ = ["Q_ABF", "Q_VIFF", "Q_M", "Q_NCIE", "Q_NMI", "Q_CE", "Q_TE_Nava"]
+__all__ = ["Q_ABF", "Q_NABF", "Q_VIFF", "Q_M", "Q_NCIE", "Q_NMI", "Q_CE", "Q_TE", "Q_TE_Nava"]

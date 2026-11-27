@@ -55,7 +55,7 @@ print(fm.evaluate(A, B, F, "ivif"))
 | `structural` | 结构相似性：`MS_SSIM`、`Q_UIQI` |
 | `similarity` | 与源图像的相似性：`Q_PSNR`、`Q_CC`、`Q_SCD`、`VIF_Sheikh`、`Q_VIFF` |
 
-共 24 个指标。每个指标的原始论文、取值范围和示例见 [README](README.md#-metrics) 与 [API 文档](docs/API.md)。
+共 35 个指标。每个指标的原始论文、取值范围和示例见 [README](README.md#-metrics) 与 [API 文档](docs/API.md)。
 
 ## 常见问题：为什么我的数值对不上？
 

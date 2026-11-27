@@ -24,6 +24,12 @@ fusion_metrics/structural.py         UIQI — Copyright (c) 2001 The University 
   (Q_UIQI)                           Austin, Zhou Wang (img_qi / UIQI.m). Z. Wang and A. C.
                                      Bovik, "A universal image quality index", IEEE Signal
                                      Process. Lett. 9 (2002).
+fusion_metrics/structural.py         Piella's metrics use ssim_index.m — Copyright (c) 2003
+  (Q_S, Q_Sw, Q_Se)                  Zhou Wang (same terms as SSIM above).
+fusion_metrics/phase.py  (Q_P)       Phase congruency after Peter Kovesi's phasecong3
+                                     (Copyright (c) 1996-2010 Peter Kovesi, permission to use
+                                     with attribution), as adapted in Z. Liu's fusion-metric
+                                     toolbox.
 fusion_metrics/variants.py           VIF — H. R. Sheikh and A. C. Bovik, "Image information
   (VIF_Sheikh)                       and visual quality", IEEE TIP 15 (2006), LIVE / The
                                      University of Texas at Austin.
@@ -33,3 +39,8 @@ verification. Files that carry their own copyright notice keep it unchanged and 
 governed by it, in particular: Q_FSIM.m, Q_VIFF.m, Q_S.m and MS_SSIM.m (SSIM,
 Copyright (c) 2003 Zhou Wang), and Q_UIQI.m (Copyright (c) 2001 The University of Texas
 at Austin).
+
+Q_CB.m, Q_CV.m, Q_C.m, Q_Y.m, Q_P.m, Q_S.m and the Q_H.m feature/SSIM choices derive from
+Z. Liu's image-fusion metric toolbox (NRCC, 2009) accompanying Liu et al., "Objective assessment
+of multiresolution image fusion algorithms for context enhancement in night vision",
+IEEE TPAMI 34(1), 2012; please cite it together with each metric's original paper.

@@ -59,6 +59,28 @@ INFO = {
     "Q_UIQI": ("Universal image quality index (UIQI(A,F) + UIQI(B,F)) / 2, 8×8 window. uint8 input follows MATLAB's "
                "uint8 arithmetic inside UIQI.m; pass float64 for the textbook index.", "[-1, 1], higher = better",
                "Wang & Bovik, IEEE Signal Process. Lett. 2002"),
+    "Q_TE": ("Tsallis-entropy mutual information I_q(A,F) + I_q(B,F), q = 1.85.", "higher = better",
+             "Cvejic, Canagarajah & Bull, Electron. Lett. 2006"),
+    "Q_NABF": ("Fusion artifacts N^AB/F: weighted share of edges that F strengthens without preserving them "
+               "(modified definition).", "[0, 1], lower = better", "Shreyamsha Kumar, Signal Image Video Process. 2013"),
+    "Q_P": ("Phase-congruency metric: product of the masked correlations of phase congruency and of the maximum "
+            "and minimum moments.", "≤ 1, higher = better", "Zhao, Laganière & Liu, IJICIC 2007"),
+    "Q_S": ("Piella's fusion quality index Q_S (local SSIM weighted by the source variances).", "[-1, 1], higher = better",
+            "Piella & Heijmans, ICIP 2003"),
+    "Q_Sw": ("Piella's weighted fusion quality index Q_W (saliency-weighted Q_S).", "[-1, 1], higher = better",
+             "Piella & Heijmans, ICIP 2003"),
+    "Q_Se": ("Piella's edge-dependent fusion quality index Q_E = Q_W(edge maps)^2 (alpha = 1).",
+             "[-1, 1], higher = better", "Piella & Heijmans, ICIP 2003"),
+    "Q_C": ("Cvejic's metric: SSIM maps weighted by the local source–fused covariances.", "[0, 1], higher = better",
+            "Cvejic et al., Int. J. Signal Process. 2005"),
+    "Q_Y": ("Yang's SSIM-based metric (weighted SSIM in redundant regions, maximum SSIM elsewhere).",
+            "[0, 1], higher = better", "Yang et al., Inf. Fusion 2008"),
+    "Q_H": ("SSIM of 7×7 local-entropy feature maps, weighted by the sources' relative entropy; returns mean(1 − E).",
+            "lower = better (E is a weighted similarity, so 1 − E is a dissimilarity; see README › Verification)", "Hossny, Nahavandi & Creighton, ICIRA 2008"),
+    "Q_CV": ("Chen–Varshney metric: CSF-filtered difference energy in 16×16 regions weighted by edge energy.",
+             "≥ 0, lower = better", "Chen & Varshney, Inf. Fusion 2007"),
+    "Q_CB": ("Chen–Blum metric: preservation of CSF-filtered local contrast.", "[0, 1], higher = better",
+             "Chen & Blum, Image Vis. Comput. 2009"),
 }
 
 

@@ -99,5 +99,50 @@ def mtimes_elem(a, b):
     return prod
 
 
+def filter2_same(k, x):
+    """MATLAB filter2(k, x, 'same') = conv2(x, rot90(k, 2), 'same') (correlation, zero padding)."""
+    k = np.asarray(k, dtype=np.float64)
+    return conv2_same(x, k[::-1, ::-1])
+
+
+def imfilter_corr_symmetric(x, k):
+    """MATLAB imfilter(x, k, 'symmetric', 'same', 'corr') for an odd-sized kernel
+    ('symmetric' mirrors the border including the edge pixel, like numpy mode='symmetric')."""
+    k = np.asarray(k, dtype=np.float64)
+    r, c = k.shape[0] // 2, k.shape[1] // 2
+    p = np.pad(np.asarray(x, dtype=np.float64), ((r, r), (c, c)), mode="symmetric")
+    return correlate2d(p, k, mode="valid")
+
+
+def blkproc(x, block, fun):
+    """MATLAB blkproc(x, [b b], [0 0], fun): zero-pads x to a multiple of the block size, applies
+    fun to every b x b block and returns the matrix of results."""
+    b = block
+    H, W = x.shape
+    Hp, Wp = -(-H // b) * b, -(-W // b) * b
+    p = np.zeros((Hp, Wp), dtype=np.result_type(x, np.float64))
+    p[:H, :W] = x
+    out = np.empty((Hp // b, Wp // b), dtype=np.result_type(x, np.float64))
+    for i in range(Hp // b):
+        for j in range(Wp // b):
+            out[i, j] = fun(p[i * b:(i + 1) * b, j * b:(j + 1) * b])
+    return out
+
+
+def freqspace_meshgrid(rows, cols):
+    """MATLAB [u, v] = freqspace([rows, cols], 'meshgrid')."""
+    f1 = (np.arange(cols) - np.floor(cols / 2)) * (2.0 / cols)
+    f2 = (np.arange(rows) - np.floor(rows / 2)) * (2.0 / rows)
+    return np.meshgrid(f1, f2)
+
+
+def im2double(x):
+    """MATLAB im2double: uint8 -> x / 255, floating input unchanged."""
+    x = np.asarray(x)
+    if x.dtype == np.uint8:
+        return x.astype(np.float64) / 255.0
+    return x.astype(np.float64)
+
+
 def as_double(x):
     return np.asarray(x).astype(np.float64)
