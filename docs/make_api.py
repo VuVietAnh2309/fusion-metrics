@@ -76,7 +76,7 @@ INFO = {
     "Q_Y": ("Yang's SSIM-based metric (weighted SSIM in redundant regions, maximum SSIM elsewhere).",
             "[0, 1], higher = better", "Yang et al., Inf. Fusion 2008"),
     "Q_H": ("SSIM of 7×7 local-entropy feature maps, weighted by the sources' relative entropy; returns mean(1 − E).",
-            "higher = better", "Hossny, Nahavandi & Creighton, ICIRA 2008"),
+            "lower = better (E is a weighted similarity, so 1 − E is a dissimilarity; see README › Verification)", "Hossny, Nahavandi & Creighton, ICIRA 2008"),
     "Q_CV": ("Chen–Varshney metric: CSF-filtered difference energy in 16×16 regions weighted by edge energy.",
              "≥ 0, lower = better", "Chen & Varshney, Inf. Fusion 2007"),
     "Q_CB": ("Chen–Blum metric: preservation of CSF-filtered local contrast.", "[0, 1], higher = better",

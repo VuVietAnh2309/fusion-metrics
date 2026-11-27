@@ -92,7 +92,7 @@ Inputs are grayscale `uint8` or `double` in [0, 255].
 | `Q_Se(A,B,F)` | Piella's edge-dependent index Q<sub>E</sub> (`Q_S.m`, sw = 3, α = 1) | Piella & Heijmans, *ICIP* 2003 |
 | `Q_C(A,B,F)` | Covariance-weighted SSIM | Cvejic et al., *Int. J. Signal Process.* 2005 |
 | `Q_Y(A,B,F)` | SSIM-based metric with redundancy region test | Yang et al., *Inf. Fusion* 2008 |
-| `Q_H(A,B,F)` | SSIM on 7×7 local-entropy feature maps | Hossny, Nahavandi & Creighton, *ICIRA* 2008 |
+| `Q_H(A,B,F)` | 1 − entropy-weighted SSIM on 7×7 local-entropy feature maps (**lower = better**) | Hossny, Nahavandi & Creighton, *ICIRA* 2008 |
 | `Q_CV(A,B,F)` | CSF-filtered regional difference energy (lower = better) | Chen & Varshney, *Inf. Fusion* 2007 |
 | `Q_CB(A,B,F)` | Local contrast preservation with a CSF filter | Chen & Blum, *Image Vis. Comput.* 2009 |
 | `Q_PSNR(A,B,F)` | Mean of PSNR(F,A) and PSNR(F,B) | — |
@@ -118,7 +118,7 @@ enhancement in night vision”*, IEEE TPAMI 2012. **Please cite the original pap
 | `image` | `Q_MLI`, `Q_En`, `Q_CI`, `SF`, `AG_VIFB`, `Q_EI` |
 | `information` | `Q_MI`, `Q_NMI`, `Q_NCIE`, `Q_TE`, `Q_TE_Nava`, `Q_FMI`, `Q_CE` |
 | `feature` | `Q_ABF`, `Q_NABF`, `Q_M`, `Q_SF`, `Q_P`, `Q_FSIM` |
-| `structural` | `MS_SSIM`, `Q_UIQI`, `Q_S`, `Q_Sw`, `Q_Se`, `Q_C`, `Q_Y`, `Q_H` |
+| `structural` | `MS_SSIM`, `Q_UIQI`, `Q_S`, `Q_Sw`, `Q_Se`, `Q_C`, `Q_Y` |
 | `perception` | `Q_CV`, `Q_CB` |
 | `liu2012` | the twelve metrics compared by Liu et al., *TPAMI* 2012: `Q_NMI`, `Q_TE`, `Q_NCIE`, `Q_ABF`, `Q_M`, `Q_SF`, `Q_P`, `Q_S`, `Q_C`, `Q_Y`, `Q_CV`, `Q_CB` |
 | `similarity` | `Q_PSNR`, `Q_CC`, `Q_SCD`, `VIF_Sheikh`, `Q_VIFF` |
@@ -190,6 +190,13 @@ exceptions below.
   ratio amplifies FFT round-off (~1e-16) by up to ~1e13. Given Octave's own FFT output the port reproduces Octave to
   1e-15, but with each library's FFT the totals differ by a median 2e-5 (max 5e-3) on real images — MATLAB, Octave and
   NumPy do not agree on this metric to more digits.
+
+**`Q_H` is a dissimilarity (lower = better).** Liu's `metricHossny.m`, the only known implementation of Hossny et
+al.'s metric, does not run, so `Q_H.m` reconstructs it from the paper. In that file `E = p .* SSIM(...)` weights a
+*similarity* by feature importance, and the returned `mean(1 − E)` therefore grows as F departs from the sources:
+identical images give a small value (≈ mean(1 − p)), unrelated images approach 1. The port keeps the reference output
+unchanged and documents the direction; `Q_H` is not part of the `structural` preset, whose other members are all
+higher-is-better.
 
 <details>
 <summary><b>Regenerate the reference values (needs GNU Octave)</b></summary>

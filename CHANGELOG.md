@@ -13,11 +13,13 @@ All notable changes to this project are documented here. The format follows
   phase congruency), `Q_S` / `Q_Sw` / `Q_Se` (Piella, `Q_S.m` with sw = 1, 2, 3), `Q_C` (Cvejic), `Q_Y` (Yang),
   `Q_H` (Hossny), `Q_CV` (Chen–Varshney) and `Q_CB` (Chen–Blum). Every `.m` file in `matlab/` now has a port.
 - Presets `perception` (`Q_CV`, `Q_CB`) and `liu2012` (the twelve metrics compared by Liu et al., TPAMI 2012);
-  `information`, `feature` and `structural` include the new metrics.
+  `information`, `feature` and `structural` include the new metrics (`Q_H` in no preset, see Notes).
 - MATLAB helpers `filter2_same`, `imfilter_corr_symmetric`, `blkproc`, `freqspace_meshgrid`, `im2double`.
 - Octave shims `blkproc.m` and `freqspace.m` for verification, and `verify/octave_exactflat/` (see below).
 
 ### Notes
+- `Q_H` is lower-is-better: `Q_H.m` returns mean(1 − E) where E is an importance-weighted SSIM (a similarity). The
+  value is kept as in the reference file and `Q_H` is not included in the `structural` preset.
 - `Q_C` and `Q_Y` evaluate windows in which an image is constant in exact arithmetic: with C = 2e-16 the reference
   files return round-off-dependent values there (MATLAB, Octave and NumPy disagree, by up to ~1e-2 on real images).
 - `Q_CB` is reproducible across FFT libraries only to a median 2e-5 (max 5e-3) on real images; see README.

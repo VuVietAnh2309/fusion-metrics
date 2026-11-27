@@ -470,9 +470,9 @@ Yang's SSIM-based metric (weighted SSIM in redundant regions, maximum SSIM elsew
 
 SSIM of 7×7 local-entropy feature maps, weighted by the sources' relative entropy; returns mean(1 − E).
 
-- **Range / direction:** higher = better
+- **Range / direction:** lower = better (E is a weighted similarity, so 1 − E is a dissimilarity; see README › Verification)
 - **Reference:** Hossny, Nahavandi & Creighton, ICIRA 2008
-- **Presets:** `structural`
+- **Presets:** —
 - **Source:** `fusion_metrics/structural.py`
 
 ```python

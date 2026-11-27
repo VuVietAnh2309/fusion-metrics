@@ -44,7 +44,7 @@ PRESETS = {
     "image": ["Q_MLI", "Q_En", "Q_CI", "SF", "AG_VIFB", "Q_EI"],       # statistics of F alone
     "information": ["Q_MI", "Q_NMI", "Q_NCIE", "Q_TE", "Q_TE_Nava", "Q_FMI", "Q_CE"],   # information theory
     "feature": ["Q_ABF", "Q_NABF", "Q_M", "Q_SF", "Q_P", "Q_FSIM"],    # edges / features
-    "structural": ["MS_SSIM", "Q_UIQI", "Q_S", "Q_Sw", "Q_Se", "Q_C", "Q_Y", "Q_H"],   # structural similarity
+    "structural": ["MS_SSIM", "Q_UIQI", "Q_S", "Q_Sw", "Q_Se", "Q_C", "Q_Y"],   # structural similarity
     "perception": ["Q_CV", "Q_CB"],                                    # human-perception inspired
     # Liu et al., TPAMI 2012 (the twelve metrics of its comparison)
     "liu2012": ["Q_NMI", "Q_TE", "Q_NCIE", "Q_ABF", "Q_M", "Q_SF", "Q_P", "Q_S", "Q_C", "Q_Y", "Q_CV", "Q_CB"],

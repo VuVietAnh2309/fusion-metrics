@@ -7,7 +7,7 @@ Q_UIQI.m   UIQI (Z. Wang & A. C. Bovik 2001), mean over the two sources
 Q_S.m      Piella & Heijmans 2003: Q_S (sw=1), weighted Q_W (sw=2), edge-dependent Q_E (sw=3)
 Q_C.m      Cvejic et al. 2005 (covariance-weighted SSIM)
 Q_Y.m      Yang et al. 2008
-Q_H.m      local-entropy weighted SSIM of Hossny-type (7x7 windows)
+Q_H.m      local-entropy weighted SSIM of Hossny-type (7x7 windows); lower = better, see Q_H
 """
 import numpy as np
 
@@ -208,7 +208,11 @@ def _local_entropy_u8(img, w=7):
 
 
 def Q_H(A, B, F):
-    """Local-entropy weighted SSIM metric of Q_H.m (7x7 windows; returns mean(1 - E))."""
+    """Local-entropy weighted SSIM metric of Q_H.m (7x7 windows; returns mean(1 - E)).
+
+    Lower is better. In Q_H.m, E = p .* SSIM(entropy maps) is an importance-weighted *similarity*, so
+    mean(1 - E) grows as F departs from the sources (identical images give a small value, about the mean of
+    1 - p; unrelated images approach 1). The port keeps the reference file's output unchanged."""
     w, half = 7, 3
     E1, E2, Ef = (_local_entropy_u8(as_double(X), w) for X in (A, B, F))
     p1, p2 = E1 / E1.max(), E2 / E2.max()
