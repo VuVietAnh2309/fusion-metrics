@@ -11,13 +11,15 @@ MATLAB reference implementations produce.
 """
 from ._matlab import read_gray, read_gray_cv, rgb2gray
 from .basic import Q_MLI, Q_AG, Q_En, Q_CI, Q_EI, SF, Q_SF, Q_PSNR, Q_CC, Q_SCD, Q_MI
-from .info import Q_ABF, Q_VIFF, Q_M, Q_NCIE, Q_NMI, Q_CE, Q_TE_Nava
-from .structural import MS_SSIM, Q_UIQI
+from .info import Q_ABF, Q_NABF, Q_VIFF, Q_M, Q_NCIE, Q_NMI, Q_CE, Q_TE, Q_TE_Nava
+from .structural import MS_SSIM, Q_UIQI, Q_S, Q_Sw, Q_Se, Q_Y, Q_C, Q_H
+from .perceptual import Q_CV, Q_CB
+from .phase import Q_P
 from .fsim import Q_FSIM
 from .fmi import Q_FMI, edge_sobel
 from .variants import AG_VIFB, VIF_Sheikh
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 __author__ = "Vu Viet Anh (Vũ Việt Anh)"
 __email__ = "vietanhresearcher@gmail.com"
 
@@ -30,6 +32,9 @@ METRICS = {
     "Q_FMI": (Q_FMI, True),
     "Q_CI": (Q_CI, False), "Q_EI": (Q_EI, False), "Q_CE": (Q_CE, True), "Q_NMI": (Q_NMI, True),
     "MS_SSIM": (MS_SSIM, True), "Q_UIQI": (Q_UIQI, True),
+    "Q_TE": (Q_TE, True), "Q_NABF": (Q_NABF, True), "Q_P": (Q_P, True),
+    "Q_S": (Q_S, True), "Q_Sw": (Q_Sw, True), "Q_Se": (Q_Se, True), "Q_C": (Q_C, True),
+    "Q_Y": (Q_Y, True), "Q_H": (Q_H, True), "Q_CV": (Q_CV, True), "Q_CB": (Q_CB, True),
     # widely used alternative definitions; MATLAB references in ../matlab_added/
     "AG_VIFB": (AG_VIFB, False), "VIF_Sheikh": (VIF_Sheikh, True),
 }
@@ -37,9 +42,12 @@ METRICS = {
 # Ready-made metric groups (Liu et al., TPAMI 2012 taxonomy, plus image statistics).
 PRESETS = {
     "image": ["Q_MLI", "Q_En", "Q_CI", "SF", "AG_VIFB", "Q_EI"],       # statistics of F alone
-    "information": ["Q_MI", "Q_NMI", "Q_NCIE", "Q_TE_Nava", "Q_FMI", "Q_CE"],   # information theory
-    "feature": ["Q_ABF", "Q_M", "Q_SF", "Q_FSIM"],                     # edges / features
-    "structural": ["MS_SSIM", "Q_UIQI"],                               # structural similarity
+    "information": ["Q_MI", "Q_NMI", "Q_NCIE", "Q_TE", "Q_TE_Nava", "Q_FMI", "Q_CE"],   # information theory
+    "feature": ["Q_ABF", "Q_NABF", "Q_M", "Q_SF", "Q_P", "Q_FSIM"],    # edges / features
+    "structural": ["MS_SSIM", "Q_UIQI", "Q_S", "Q_Sw", "Q_Se", "Q_C", "Q_Y", "Q_H"],   # structural similarity
+    "perception": ["Q_CV", "Q_CB"],                                    # human-perception inspired
+    # Liu et al., TPAMI 2012 (the twelve metrics of its comparison)
+    "liu2012": ["Q_NMI", "Q_TE", "Q_NCIE", "Q_ABF", "Q_M", "Q_SF", "Q_P", "Q_S", "Q_C", "Q_Y", "Q_CV", "Q_CB"],
     "similarity": ["Q_PSNR", "Q_CC", "Q_SCD", "VIF_Sheikh", "Q_VIFF"],  # similarity to sources
     # the table most infrared-visible fusion papers report (CDDFuse, DDFM, ...):
     # EN, SD, SF, MI, SCD, VIF, Qabf, SSIM

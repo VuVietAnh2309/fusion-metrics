@@ -24,7 +24,13 @@ TOL = 1e-9
 # regions where the local variances inside Q_VIFF are pure round-off (~1e-11) and sit at the
 # .m file's 1e-10 thresholds; the result then depends on the summation order of filter2, which
 # differs between MATLAB, Octave and SciPy. On real images Q_VIFF agrees to 1e-14.
-RELAXED = {("saturated", "Q_VIFF"): 1e-4}
+RELAXED = {("saturated", "Q_VIFF"): 1e-4,
+           # Q_CB divides two Gaussian-filtered versions of the CSF band-passed image; where the
+           # denominator crosses zero (large signal-free areas) this ratio amplifies the FFT
+           # round-off (~1e-16) by up to ~1e13. Fed with Octave's own FFT output the port
+           # reproduces Octave to 1e-15, so the remaining differences come from the FFT library
+           # (NumPy/pocketfft vs FFTW; MATLAB differs again) and are a property of the metric.
+           ("saturated", "Q_CB"): 5e-2, ("unit_range", "Q_CB"): 1e-3, ("low_range", "Q_CB"): 1e-7}
 
 
 def _names(arr):
