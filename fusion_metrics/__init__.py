@@ -19,6 +19,10 @@ from .fsim import Q_FSIM
 from .fmi import Q_FMI, edge_sobel
 from .variants import AG_VIFB, VIF_Sheikh
 
+import warnings as _warnings
+
+import numpy as _np
+
 __version__ = "1.2.0"
 __author__ = "Vu Viet Anh (Vũ Việt Anh)"
 __email__ = "vietanhresearcher@gmail.com"
@@ -56,11 +60,44 @@ PRESETS = {
 PRESETS["all"] = list(METRICS)
 
 
-def evaluate(A, B, F, names=None):
-    """Compute the requested metrics (a list of names or a PRESETS key; default: all)."""
+class ScaleMismatchWarning(UserWarning):
+    """The images do not look like they are in the [0, 255] range the metrics expect."""
+
+
+def check_range(*images):
+    """Warn (ScaleMismatchWarning) when images look normalised to [0, 1].
+
+    The reference metrics expect grey levels in [0, 255]. An image whose maximum is <= 1 is
+    almost certainly a normalised float image; mixing it with [0, 255] images makes gradient
+    and SSIM-type metrics collapse silently (Q_ABF 0.40 -> 0.0004). Returns True if all
+    images look fine."""
+    peaks = [float(_np.max(x)) for x in images]
+    low = [i for i, m in enumerate(peaks) if m <= 1.0]
+    if not low:
+        return True
+    labels = "ABF" if len(images) == 3 else [f"#{i}" for i in range(len(images))]
+    which = ", ".join(labels[i] for i in low)
+    if len(low) < len(images):
+        msg = (f"image(s) {which} have max <= 1 while the others reach "
+               f"{max(peaks):.0f}: mixed value ranges make most metrics meaningless. "
+               "Scale every image to [0, 255] (e.g. x * 255) before evaluating.")
+    else:
+        msg = ("all images have max <= 1; the metrics expect grey levels in [0, 255]. "
+               "Multiply by 255 to get values comparable with published tables.")
+    _warnings.warn(msg, ScaleMismatchWarning, stacklevel=3)
+    return False
+
+
+def evaluate(A, B, F, names=None, check=True):
+    """Compute the requested metrics (a list of names or a PRESETS key; default: all).
+
+    With check=True (default) a ScaleMismatchWarning is emitted when an image looks
+    normalised to [0, 1]; see check_range()."""
     if isinstance(names, str):
         names = PRESETS[names]
     names = names or list(METRICS)
+    if check:
+        check_range(A, B, F)
     out = {}
     for n in names:
         fn, src = METRICS[n]
@@ -79,5 +116,6 @@ def evaluate_files(path_a, path_b, path_f, names=None, reader=None):
 
 read_gray_paper = read_gray_cv  # backwards-compatible alias
 
-__all__ = list(METRICS) + ["METRICS", "PRESETS", "evaluate", "evaluate_files", "read_gray",
-                           "read_gray_cv", "rgb2gray", "edge_sobel", "__version__"]
+__all__ = list(METRICS) + ["METRICS", "PRESETS", "evaluate", "evaluate_files", "check_range",
+                           "ScaleMismatchWarning", "read_gray", "read_gray_cv", "rgb2gray",
+                           "edge_sobel", "__version__"]

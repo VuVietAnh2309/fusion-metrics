@@ -147,6 +147,8 @@ Add `--json` for machine-readable output, or `--reader cv` to use the OpenCV gra
 - **How big are these effects?** Scale mismatches dominate (Q<sup>AB/F</sup> 0.40 → 0.0004 when only F is in [0, 1]);
   gray conversion barely matters (one gray level on ~0.1% of pixels of a pseudo-colour image). Details:
   [Why your image-fusion metrics don't match the paper](https://vuvietanh2309.github.io/blog/fusion-metrics-mismatch/).
+  `evaluate()` now emits a `ScaleMismatchWarning` when an image looks normalised to [0, 1] (max ≤ 1); pass
+  `check=False` to silence it, or call `fm.check_range(A, B, F)` yourself.
 - **Data type matters for `Q_MI`.** On `uint8` input MATLAB saturates `255 + 1` to 255, merging the top gray level into
   the previous histogram bin. The port reproduces this from the array's dtype — read images as `uint8`.
 - **`Q_S`, `Q_Sw`, `Q_Se` are one `.m` file.** `Q_S.m` is `metricPeilla(A, B, F, sw)`; the port exposes
