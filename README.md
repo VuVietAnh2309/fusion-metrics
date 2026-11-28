@@ -144,6 +144,9 @@ Add `--json` for machine-readable output, or `--reader cv` to use the OpenCV gra
 - **Gray conversion.** `read_gray` reproduces MATLAB `imread` + `rgb2gray` (0.298936, 0.587043, 0.114021, rounded) —
   use it to match MATLAB. `read_gray_cv` uses OpenCV's 0.299 / 0.587 / 0.114, common in Python code bases. Loading with
   `cv2.imread(path, 0)` directly gives yet another result.
+- **How big are these effects?** Scale mismatches dominate (Q<sup>AB/F</sup> 0.40 → 0.0004 when only F is in [0, 1]);
+  gray conversion barely matters (one gray level on ~0.1% of pixels of a pseudo-colour image). Details:
+  [Why your image-fusion metrics don't match the paper](https://vuvietanh2309.github.io/blog/fusion-metrics-mismatch/).
 - **Data type matters for `Q_MI`.** On `uint8` input MATLAB saturates `255 + 1` to 255, merging the top gray level into
   the previous histogram bin. The port reproduces this from the array's dtype — read images as `uint8`.
 - **`Q_S`, `Q_Sw`, `Q_Se` are one `.m` file.** `Q_S.m` is `metricPeilla(A, B, F, sw)`; the port exposes

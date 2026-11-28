@@ -5,6 +5,10 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Documentation
+- State the measured size of the gray-conversion effect (small) and of scale mismatches (large); link the write-up
+  on why fusion metrics differ between implementations. The Chinese README overstated the gray-conversion effect.
+
 ## [1.2.0] — 2026-11-27
 
 ### Added

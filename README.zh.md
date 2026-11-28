@@ -61,9 +61,11 @@ print(fm.evaluate(A, B, F, "ivif"))
 
 1. **尺度不一致。** 融合图在 [0,1]、源图像在 [0,255]（或反过来）时，Qabf 会接近 0：同一组图像在尺度一致时
    Qabf = 0.31，把融合图改成 [0,1] 后只有 0.0003。请把三张图统一到 0–255。
-2. **灰度转换不同。** MATLAB `rgb2gray` 与 OpenCV 的系数不同，伪彩色 PET/SPECT 图像差异尤其明显。
-   `fm.read_gray` 复现 MATLAB，`fm.read_gray_cv` 使用 OpenCV。
+2. **灰度转换。** MATLAB `rgb2gray` 与 OpenCV 的系数略有不同，但影响很小：在伪彩色测试图上约 0.1% 的像素相差一个
+   灰度级，MI 变化约 0.001。若要与 MATLAB 完全一致，请用 `fm.read_gray`；`fm.read_gray_cv` 使用 OpenCV。
 3. **MATLAB 特有细节。** 边界处理、四舍五入规则、`uint8` 运算饱和等，本库均按原版实现。
+
+各项差异的来源与实际影响大小，详见（英文）：[Why your image-fusion metrics don't match the paper](https://vuvietanh2309.github.io/blog/fusion-metrics-mismatch/)。
 
 ## 验证
 

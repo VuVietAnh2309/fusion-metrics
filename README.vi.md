@@ -53,6 +53,9 @@ từng metric và các quy ước làm thay đổi kết quả (đổi ảnh xá
 
 - Đọc ảnh bằng `read_gray` (giống MATLAB `imread` + `rgb2gray`) để ra đúng số của MATLAB. `cv2.imread(path, 0)` cho kết
   quả khác.
+- Chênh lệch lớn nhất thường do **lệch thang đo** (ảnh fused ở [0,1], ảnh nguồn ở [0,255]: Q<sup>AB/F</sup> từ 0.40 còn
+  0.0004); khác biệt do chuyển ảnh xám thì rất nhỏ. Phân tích chi tiết (tiếng Anh):
+  [Why your image-fusion metrics don't match the paper](https://vuvietanh2309.github.io/blog/fusion-metrics-mismatch/).
 - `Q_AG` khác `AG_VIFB`, và `Q_VIFF` (Han et al.) khác `VIF_Sheikh` (Sheikh & Bovik). Khi báo cáo, ghi rõ dùng metric nào.
 - `MS_SSIM` thực ra là SSIM một thang (lấy trung bình SSIM(A,F) và SSIM(B,F)), đúng như file `.m` gốc.
 - `Q_UIQI` giữ đúng hành vi của `UIQI.m`: file này không đổi ảnh sang double, nên với ảnh `uint8` các phép bình phương bị bão hoà ở 255 như trong MATLAB. Muốn có UIQI theo định nghĩa gốc thì truyền ảnh `float64`.
