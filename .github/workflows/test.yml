@@ -17,7 +17,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install
-        run: pip install .
+        run: pip install . pytest
+      - name: Unit tests
+        run: pytest -q tests
       - name: Self-test against MATLAB/Octave reference values
         run: python verify/selftest.py
       - name: CLI smoke test

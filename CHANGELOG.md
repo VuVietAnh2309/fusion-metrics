@@ -5,6 +5,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- `evaluate()` warns (`ScaleMismatchWarning`) when an image looks normalised to [0, 1] while the metrics expect
+  [0, 255] — the most common cause of near-zero Q_ABF / SSIM values. New `check_range()` helper; `check=False`
+  turns the check off.
+- Unit-test suite (`tests/`, pytest) run in CI next to the MATLAB/Octave self-test.
+
 ### Documentation
 - State the measured size of the gray-conversion effect (small) and of scale mismatches (large); link the write-up
   on why fusion metrics differ between implementations. The Chinese README overstated the gray-conversion effect.
